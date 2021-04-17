@@ -3,8 +3,9 @@ using Assets.Scripts.Menu;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Assets.Scripts.Utility;
 using System;
+using Assets.Scripts.Requests;
+using Assets.Scripts.Model;
 
 namespace Assets.Scripts
 {
@@ -16,10 +17,12 @@ namespace Assets.Scripts
         MenuCanvasManager canvasManager;
         ApplicationView applicationView;
 
+        private int curr_identifying_participant;
+
         protected override void Awake()
         {
             base.Awake();
-
+            curr_identifying_participant = 0;
             dataManager = DataManager.GetInstance();
             canvasManager = MenuCanvasManager.GetInstance();
             applicationView = ApplicationView.GetInstance();
@@ -27,154 +30,106 @@ namespace Assets.Scripts
         }
 
 
-        public void OnNotification(Notification notification)
+        public void OnExperimentIdEnterStart()
         {
+            Debug.Log("In OnExperimentIdEnterStart");
+            applicationView.OpenScreen(ScreenType.ExperimentIdEnteringMenu);
+        }
 
-            var res = 0;
-            switch (notification)
-            {
-                case Notification.RegistrationChosen:
-                    applicationView.OpenScreen(ScreenType.RegistrationMenu);
-                    break;
+        public void OnExperimentIdEnterSend()
+        {
+            //todo
+            ExperimentIdCanvasController experimentIdCanvasController = canvasManager.GetExperimentIdCanvasController();
+            string experimentId = experimentIdCanvasController.GetExperimentId();
 
-                case Notification.RegistrationSend:
-                    RegistrationCanvasController registrationCanvasController = canvasManager.GetRegistrationCanvasController();
-                    RegistrationRequest registrationInfo = registrationCanvasController.GetRegistrationInfo();
-                    res = dataManager.Register(registrationInfo);
-                    if (res != 0)
-                    {
+            applicationView.OpenScreen(ScreenType.MainMenu);
+        }
 
-                    }
+        public void StartFirstParticipantIdentification()
+        {
+            curr_identifying_participant = 1;
+            applicationView.OpenScreen(ScreenType.ParticipantIdentificationTypeChoiceMenu);
+        }
 
-                    //var net_manager = AlphaSNetManager.GetInstance();
-                    //https://localhost:5001/api/Participant
-                    //net_manager.SendGet("https://localhost:5001/api/Participant");
-
-                    applicationView.OpenScreen(ScreenType.MainMenu);
-                    break;
-
-                case Notification.AuthorisationChosen:
-                    applicationView.OpenScreen(ScreenType.AuthorisationMenu);
-                    
-                    break;
-
-                case Notification.AuthorisationSend:
-                    AuthorisationCanvasController authorisationCanvasController = canvasManager.GetAuthorisationCanvasController();
-                    AuthorisationRequest authorisationInfo = authorisationCanvasController.GetAuthorisationInfo();
-
-                    res = dataManager.Login(authorisationInfo);
-                    if (res != 0)
-                    {
-
-                    }
-                    applicationView.OpenScreen(ScreenType.MainMenu);
-                    break;
-
-
-                case Notification.MatchingStart:
-                    Debug.Log("Opening matching screen");
-                    applicationView.OpenScreen(ScreenType.MatchingScreen);
-                    break;
-
-                case Notification.BaseAlphaStart:
-                    applicationView.ShowErrorMessage("No base alpha ((");
-
-                    Debug.Log(":AOSDkfjs;dlfkjad;rlrk");
-
-                    applicationView.OpenScreen(ScreenType.MainMenu);
-                    break;
-
-                case Notification.GameStart:
-                    applicationView.OpenScreen(ScreenType.GameScreen);
-                    break;
-
-                case Notification.MatchingFinish:
-                    applicationView.OpenScreen(ScreenType.MainMenu);
-                    break;
-
-                case Notification.CloseError:
-                    applicationView.CloseErrorMessage();
-                    break;
-
-                default:
-                    break;
-            }
+        public void StartSecondParticipantIdentification()
+        {
+            curr_identifying_participant = 2;
+            applicationView.OpenScreen(ScreenType.ParticipantIdentificationTypeChoiceMenu);
         }
 
         public void OnRegistrationChosen()
         {
-            applicationView.OpenScreen(ScreenType.RegistrationMenu);
+            applicationView.OpenScreen(ScreenType.ParticipantRegistrationMenu);
         }
+        public void OnAuthorisationChosen()
+        {
+            applicationView.OpenScreen(ScreenType.ParticipantAuthorisationMenu);
+        }
+
 
         public void OnRegistrationSend()
         {
-            RegistrationCanvasController registrationCanvasController = canvasManager.GetRegistrationCanvasController();
+            
+            ParticipantRegistrationCanvasController registrationCanvasController = canvasManager.GetParticipantRegistrationCanvasController();
             RegistrationRequest registrationInfo = registrationCanvasController.GetRegistrationInfo();
             int res = dataManager.Register(registrationInfo);
             if (res != 0)
             {
-
+                //todo
             }
 
-            //var net_manager = AlphaSNetManager.GetInstance();
-            //https://localhost:5001/api/Participant
-            //net_manager.SendGet("https://localhost:5001/api/Participant");
+            //todo сделать нотификейшн с выданным id, чтобы чел точно его записал где-нибудь
+            //todo Добавить в эксперимент манагер инфу про партисипанта
 
-            applicationView.OpenScreen(ScreenType.MainMenu);
-        }
-
-        public void OnAuthorisationChosen()
-        {
-            applicationView.OpenScreen(ScreenType.AuthorisationMenu);
+            applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
         }
 
         public void OnAuthorisationSend()
         {
-            AuthorisationCanvasController authorisationCanvasController = canvasManager.GetAuthorisationCanvasController();
+            ParticipantAuthorisationCanvasController authorisationCanvasController = canvasManager.GetParticipantAuthorisationCanvasController();
             AuthorisationRequest authorisationInfo = authorisationCanvasController.GetAuthorisationInfo();
+
+
 
             int res = dataManager.Login(authorisationInfo);
             if (res != 0)
             {
-
+                //todo
             }
-            applicationView.OpenScreen(ScreenType.MainMenu);
-        }
 
-        public void OnMatchingStart()
+            //todo Добавить в эксперимент манагер инфу про партисипанта
+
+            applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+        }
+        
+        public void OnParticipantInExperimentSend()
         {
-            Debug.Log("Opening matching screen");
-            applicationView.OpenScreen(ScreenType.MatchingScreen);
+            ParticipantInExperimentCanvasController participantInExperimentCanvasController = canvasManager.GetParticipantInExperimentCanvasController();
+            ParticipantInExperiment participantInExperiment = participantInExperimentCanvasController.GetParticipantInExperiment();
+
+            //todo сделать сохранение этой инфы в эксперимент манагере
+
+            applicationView.OpenScreen(ScreenType.MainMenu);
         }
 
         public void OnBaseAlphaStart()
         {
-            System.Diagnostics.Process myProcess = new System.Diagnostics.Process();
-                
-           //myProcess.StartInfo.UseShellExecute = false;
-           //myProcess.StartInfo.FileName = "F:\\Unity projects\\TestModuleBuild\\TestModule.exe";
+           System.Diagnostics.Process myProcess = new System.Diagnostics.Process();
+
            myProcess.StartInfo.FileName = "F:\\TestModule.exe.lnk";
            myProcess.Start();
 
-            
-
-
-            //applicationView.ShowErrorMessage("No base alpha ((");
-
-            //Debug.Log(":AOSDkfjs;dlfkjad;rlrk");
-
-            //applicationView.OpenScreen(ScreenType.MainMenu);
         }
 
-        public void OnMatchingFinish()
+
+        public void StartExperiment()
         {
-            applicationView.OpenScreen(ScreenType.MainMenu);
-        }
 
+        }
 
         public void OnCloseError()
         {
-            applicationView.CloseErrorMessage();
+            applicationView.CloseNotificationMessage();
         }
 
 

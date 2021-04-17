@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Assets.Scripts.Utility;
+using Assets.Scripts.Requests;
 using TMPro;
 using System;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Menu
 {
-    public class RegistrationCanvasController : CanvasController
+    public class ParticipantRegistrationCanvasController : CanvasController
     {
         [SerializeField]
         TMP_InputField BirthDayInputField;
@@ -45,7 +45,7 @@ namespace Assets.Scripts.Menu
             BirthMonthInputField.onEndEdit.AddListener(delegate { DateValidation(); });
             BirthYearInputField.onEndEdit.AddListener(delegate { DateValidation(); });
             Debug.Log("In Awake in RegistrationCanvasController");
-            this.menuCanvasType = MenuCanvasType.RegistrationMenu;
+            this.menuCanvasType = MenuCanvasType.ParticipantRegistrationMenu;
         }
 
 

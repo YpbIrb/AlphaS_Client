@@ -11,11 +11,13 @@ namespace Assets.Scripts.Menu
 {
     public enum MenuCanvasType
     {
-        IdentificationTypeChoiceMenu,
-        RegistrationMenu,
-        AuthorisationMenu,
+        ExperimentIdEnteringMenu,
         MainMenu,
-        ErrorMessageMenu
+        ParticipantIdentificationTypeChoiceMenu,
+        ParticipantAuthorisationMenu,
+        ParticipantRegistrationMenu,
+        ParticipantInExperimentMenu,
+        NotificationMessageMenu
     }
 
 
@@ -39,7 +41,7 @@ namespace Assets.Scripts.Menu
                 Debug.Log("Deactivateing Canvas with type: " + x.menuCanvasType);
                 x.gameObject.SetActive(false);
             });
-            OpenCanvas(MenuCanvasType.IdentificationTypeChoiceMenu);
+            OpenCanvas(MenuCanvasType.MainMenu);
         }
 
         public void OpenCanvas(MenuCanvasType _type)
@@ -62,6 +64,8 @@ namespace Assets.Scripts.Menu
                 canvas.enabled = true;
             }
 
+            Debug.Log("Opening Canvas . type = " + _type);
+
         }
 
         public CanvasController GetCanvasControllerByType(MenuCanvasType _type)
@@ -79,20 +83,32 @@ namespace Assets.Scripts.Menu
             }
         }
 
-        public RegistrationCanvasController GetRegistrationCanvasController()
+        public ExperimentIdCanvasController GetExperimentIdCanvasController()
         {
-            return (RegistrationCanvasController)GetCanvasControllerByType(MenuCanvasType.RegistrationMenu);
+            return (ExperimentIdCanvasController)GetCanvasControllerByType(MenuCanvasType.ExperimentIdEnteringMenu);
         }
 
-        public AuthorisationCanvasController GetAuthorisationCanvasController()
+
+        public ParticipantAuthorisationCanvasController GetParticipantAuthorisationCanvasController()
         {
-            return (AuthorisationCanvasController)GetCanvasControllerByType(MenuCanvasType.AuthorisationMenu);
+            return (ParticipantAuthorisationCanvasController)GetCanvasControllerByType(MenuCanvasType.ParticipantAuthorisationMenu);
         }
 
-        public ErrorCanvasController GetErrorCanvasController()
+        public ParticipantRegistrationCanvasController GetParticipantRegistrationCanvasController()
         {
-            return (ErrorCanvasController)GetCanvasControllerByType(MenuCanvasType.ErrorMessageMenu);
+            return (ParticipantRegistrationCanvasController)GetCanvasControllerByType(MenuCanvasType.ParticipantRegistrationMenu);
         }
+
+        public ParticipantInExperimentCanvasController GetParticipantInExperimentCanvasController()
+        {
+            return (ParticipantInExperimentCanvasController)GetCanvasControllerByType(MenuCanvasType.ParticipantInExperimentMenu);
+        }
+
+        public NotificationCanvasController GetNotificationCanvasController()
+        {
+            return (NotificationCanvasController)GetCanvasControllerByType(MenuCanvasType.NotificationMessageMenu);
+        }
+        
 
         public void DisableMenu()
         {
@@ -104,12 +120,12 @@ namespace Assets.Scripts.Menu
             canvas.enabled = true;
         }
 
-        public void ShowError()
+        public void ShowNotification()
         {
-            OpenCanvas(MenuCanvasType.ErrorMessageMenu);
+            OpenCanvas(MenuCanvasType.NotificationMessageMenu);
         }
 
-        public void CloseError()
+        public void CloseNotification()
         {
 
         }

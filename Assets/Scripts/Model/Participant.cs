@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
-namespace Assets.Scripts.Utility
+namespace Assets.Scripts.Model
 {
-
-    
-    public class RegistrationRequest
+    [Serializable]
+    public class Participant
     {
+
+        [JsonProperty("ID")]
+        string ID { get; set; }
+
         [JsonProperty("Gender")]
         string Gender { get; set; }
 
@@ -23,7 +27,7 @@ namespace Assets.Scripts.Utility
         [JsonProperty("Birth_Country")]
         string BirthCountry { get; set; }
 
-        public RegistrationRequest(string gender, DateTime birthDate, string birthCity, string birthCountry)
+        public Participant(string gender, DateTime birthDate, string birthCity, string birthCountry)
         {
             Gender = gender;
             BirthDate = birthDate;

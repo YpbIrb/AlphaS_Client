@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Utility;
+﻿using Assets.Scripts.Requests;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Assets.Scripts.Menu
 {
 
-    public class AuthorisationCanvasController : CanvasController
+    public class ParticipantAuthorisationCanvasController : CanvasController
     {
         [SerializeField]
         GameObject IDInputField;
@@ -17,7 +17,7 @@ namespace Assets.Scripts.Menu
         protected void Awake()
         {
             Debug.Log("In Awake in AuthorisationCanvasController");
-            this.menuCanvasType = MenuCanvasType.AuthorisationMenu;
+            this.menuCanvasType = MenuCanvasType.ParticipantAuthorisationMenu;
         }
 
         public AuthorisationRequest GetAuthorisationInfo()

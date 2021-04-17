@@ -12,14 +12,13 @@ namespace Assets.Scripts
 
     enum ScreenType 
     {
-        IdentificationTypeChoiceMenu,
-        RegistrationMenu,
-        AuthorisationMenu,
+        ParticipantIdentificationTypeChoiceMenu,
+        ParticipantRegistrationMenu,
+        ParticipantAuthorisationMenu,
+        ParticipantInExperimentMenu,
+        ExperimentIdEnteringMenu,
         MainMenu,
-        BaseAlphaScreen,
-        MatchingScreen,
-        GameScreen,
-        ErrorScreen
+        NotificationScreen
     }
 
     class ApplicationView : Singleton<ApplicationView>
@@ -34,18 +33,17 @@ namespace Assets.Scripts
             base.Awake();
             menuCanvasManager = MenuCanvasManager.GetInstance();
             shows_error = false;
-            Display.displays[1].Activate();
         }
 
-        public void ShowErrorMessage(String message)
+        public void ShowNotificationMessage(String message)
         {
-            OpenScreenByType(ScreenType.ErrorScreen);
-            menuCanvasManager.GetErrorCanvasController().SetErrorMessage(message);
+            OpenScreenByType(ScreenType.NotificationScreen);
+            menuCanvasManager.GetNotificationCanvasController().SetNotificationMessage(message);
             shows_error = true;
 
         }
 
-        public void CloseErrorMessage()
+        public void CloseNotificationMessage()
         {
             OpenScreenByType(NextScreen);
             shows_error = false;
@@ -68,43 +66,32 @@ namespace Assets.Scripts
         {
             switch (screenType)
             {
-                case ScreenType.IdentificationTypeChoiceMenu:
-                    SceneManager.LoadScene(1, LoadSceneMode.Single);
-                    break;
-
-                case ScreenType.RegistrationMenu:
-                    menuCanvasManager.OpenCanvas(MenuCanvasType.RegistrationMenu);
-                    break;
-
-                case ScreenType.MatchingScreen:
-                    Debug.Log("Openeing MatchingScreen");
-                    menuCanvasManager.DisableMenu();
-                    SceneManager.LoadScene(2, LoadSceneMode.Single);
-                    break;
-
-                case ScreenType.AuthorisationMenu:
-                    menuCanvasManager.OpenCanvas(MenuCanvasType.AuthorisationMenu);
-                    break;
-
                 case ScreenType.MainMenu:
-                    Debug.Log("Openeing Main Menu");
-                    if (SceneManager.GetActiveScene().buildIndex != 0)
-                        SceneManager.LoadScene(0, LoadSceneMode.Single);
-
-
                     menuCanvasManager.OpenCanvas(MenuCanvasType.MainMenu);
                     break;
 
-                case ScreenType.BaseAlphaScreen:
-                    SceneManager.LoadScene(1, LoadSceneMode.Single);
+                case ScreenType.ExperimentIdEnteringMenu:
+                    menuCanvasManager.OpenCanvas(MenuCanvasType.ExperimentIdEnteringMenu);
                     break;
 
-                case ScreenType.GameScreen:
-                    //SceneManager.LoadScene(3);
+                case ScreenType.ParticipantIdentificationTypeChoiceMenu:
+                    menuCanvasManager.OpenCanvas(MenuCanvasType.ParticipantIdentificationTypeChoiceMenu);
                     break;
 
-                case ScreenType.ErrorScreen:
-                    menuCanvasManager.OpenCanvas(MenuCanvasType.ErrorMessageMenu);
+                case ScreenType.ParticipantAuthorisationMenu:
+                    menuCanvasManager.OpenCanvas(MenuCanvasType.ParticipantAuthorisationMenu);
+                    break;
+
+                case ScreenType.ParticipantRegistrationMenu:
+                    menuCanvasManager.OpenCanvas(MenuCanvasType.ParticipantRegistrationMenu);
+                    break;
+
+                case ScreenType.ParticipantInExperimentMenu:
+                    menuCanvasManager.OpenCanvas(MenuCanvasType.ParticipantInExperimentMenu);
+                    break;
+
+                case ScreenType.NotificationScreen:
+                    menuCanvasManager.OpenCanvas(MenuCanvasType.NotificationMessageMenu);
                     break;
             }
         }

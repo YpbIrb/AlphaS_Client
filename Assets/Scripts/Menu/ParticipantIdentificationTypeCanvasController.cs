@@ -7,13 +7,13 @@ using UnityEngine;
 
 namespace Assets.Scripts.Menu
 {
-    public class IdentificationTypeCanvasController : CanvasController
+    public class ParticipantIdentificationTypeCanvasController : CanvasController
     {
 
         protected void Awake()
         {
             Debug.Log("In Awake in IdentificationTypeCanvasController");
-            this.menuCanvasType = MenuCanvasType.IdentificationTypeChoiceMenu;
+            this.menuCanvasType = MenuCanvasType.ParticipantIdentificationTypeChoiceMenu;
         }
 
      

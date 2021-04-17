@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Utility;
+﻿using Assets.Scripts.Model;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;

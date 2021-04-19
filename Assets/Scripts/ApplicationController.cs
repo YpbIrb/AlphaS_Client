@@ -105,13 +105,14 @@ namespace Assets.Scripts
             
             ParticipantRegistrationCanvasController registrationCanvasController = canvasManager.GetParticipantRegistrationCanvasController();
             RegistrationRequest registrationInfo = registrationCanvasController.GetRegistrationInfo();
-            int res = dataManager.Register(registrationInfo);
+            Participant res = dataManager.Register(registrationInfo);
 
-            if (res != 0)
+            if (res != null)
             {
+                //todo проверка пола, и если M, то выключать поле Period
 
-                applicationView.ShowNotificationMessage("Ваш ID : " + res);
-                experimentManager.SetParticipantId(curr_identifying_participant, res);
+                applicationView.ShowNotificationMessage("Ваш ID : " + res.ParticipantId);
+                experimentManager.SetParticipantId(curr_identifying_participant, res.ParticipantId);
                 applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
             }
             else
@@ -127,19 +128,30 @@ namespace Assets.Scripts
         public void OnAuthorisationSend()
         {
             ParticipantAuthorisationCanvasController authorisationCanvasController = canvasManager.GetParticipantAuthorisationCanvasController();
-            AuthorisationRequest authorisationInfo = authorisationCanvasController.GetAuthorisationInfo();
+            int part_id = authorisationCanvasController.GetAuthorisationId();
 
-
-
-            int res = dataManager.Login(authorisationInfo);
-            if (res != 0)
+            Participant res = dataManager.Login(part_id);
+            if (res != null)
             {
+                //todo проверка пола, и если M, то выключать поле Period
+                experimentManager.SetParticipantId(curr_identifying_participant, res.ParticipantId);
+                applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+
                 //todo
+            }
+            else
+            {   if(res.ParticipantId == -1)
+                {
+                    applicationView.ShowNotificationMessage("Ошибка в авторизации по данному Id. Попробуете проверить правильность ввода, или зарегистрируйтесь");
+                }
+                else
+                {
+                    applicationView.ShowNotificationMessage("Проблемы при авторизации(не связаны именно с этим id)");
+                }
             }
 
             //todo Добавить в эксперимент манагер инфу про партисипанта
 
-            applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
         }
         
         public void OnParticipantInExperimentSend()
@@ -158,10 +170,9 @@ namespace Assets.Scripts
         {
             if (experimentManager != null && experimentManager.experiment != null)
             {
-
                 Debug.Log("Starting ExecuteExperiment");
-                experimentManager.StartExperiment();
                 applicationView.OpenScreen(ScreenType.ExperimentProcessMenu);
+                experimentManager.StartExperiment();
             }
             else
             {
@@ -172,23 +183,24 @@ namespace Assets.Scripts
         public void ContinueExperiment()
         {
             //todo
-            if (experimentManager != null && experimentManager.experiment != null)
-            {
-
-                Debug.Log("Starting ExecuteExperiment");
-                experimentManager.StartExperiment();
-            }
-            else
-            {
-                applicationView.ShowNotificationMessage("No Experiment to start");
-            }
+            experimentManager.ContinueExperiment();
         }
 
         public void FinishExperiment()
         {
             //todo отправка данных, + чтобы в нотификации говорилось о том, куда данные сохранены(локально, или на сервачок)
+            Experiment experiment = experimentManager.GetFinalExperimentInfo();
 
-            applicationView.ShowNotificationMessage("Эксперимент завершен");
+            int res = dataManager.SendExperimentUpdate(experiment);
+            if (res == 0)
+            {
+                applicationView.ShowNotificationMessage("Эксперимент завершен. Данные успешно загружены на сервер.");
+            }
+            else
+            {
+                applicationView.ShowNotificationMessage("Эксперимент завершен. На сервер данные не загружены.");
+            }
+            
             applicationView.OpenScreen(ScreenType.MainMenu);
         }
 

@@ -17,6 +17,7 @@ namespace Assets.Scripts
     {
         private const string base_url = "http://localhost:8000/api";
         private const string participant_creation_url = "/Participants/Create";
+        private const string participant_get_url = "/Participants/";
 
         private const string experiment_get_url = "/Experiments/";
         private const string experiment_update_url = "/Experiments/Update/";
@@ -90,6 +91,7 @@ namespace Assets.Scripts
                 if (response.IsSuccessStatusCode)
                 {
                     string responseBody = response.Content.ReadAsStringAsync().Result;
+                    UnityEngine.Debug.Log("Get Participant from server (after registration): \n" + responseBody);
                     var jpart = JObject.Parse(responseBody);
                     Participant part = jpart.ToObject<Participant>();
                     return part;
@@ -169,7 +171,55 @@ namespace Assets.Scripts
             }
         }
 
+        public Participant GetParticipantRequest(int id)
+        {
+            UnityEngine.Debug.Log("Sending GetParticipant request, Url : " + base_url + participant_get_url + id);
+            //StringContent content = new StringContent(ModuleRequest, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = client.GetAsync(base_url + participant_get_url + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string responseBody = response.Content.ReadAsStringAsync().Result;
+                var jpart = JObject.Parse(responseBody);
+                UnityEngine.Debug.Log("Get Participant from server: \n" + responseBody);
+                Participant part = jpart.ToObject<Participant>();
+                return part;
+            }
 
+            else
+            {
+                if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    Participant part = new Participant((-1));
+                }
+
+                UnityEngine.Debug.Log("Unseccessfull http GetParticipant request. StatusCode : " + response.StatusCode);
+                return null;
+            }
+        }
+
+        public int SendExperimentUpdateRequest(int id, string registrationRequest)
+        {
+            UnityEngine.Debug.Log("Sending ExperimentUpdate request, Url : " + base_url + experiment_update_url + id);
+            //StringContent content = new StringContent(ModuleRequest, Encoding.UTF8, "application/json");
+
+            StringContent content = new StringContent(registrationRequest, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = client.PostAsync(base_url + experiment_update_url + id, content).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                return 0;
+            }
+
+            else
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    Participant part = new Participant((-1));
+                }
+
+                UnityEngine.Debug.Log("Unseccessfull http GetParticipant request. StatusCode : " + response.StatusCode);
+                return -1;
+            }
+        }
 
     }
 }

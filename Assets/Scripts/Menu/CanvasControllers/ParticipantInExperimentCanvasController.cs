@@ -29,10 +29,6 @@ namespace Assets.Scripts.Menu
         {
             Debug.Log("In Awake in IdentificationTypeCanvasController");
             this.menuCanvasType = MenuCanvasType.ParticipantInExperimentMenu;
-
-            
-
-
         }
 
         public ParticipantInExperiment GetParticipantInExperiment()

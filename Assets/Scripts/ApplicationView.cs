@@ -94,6 +94,11 @@ namespace Assets.Scripts
                 case ScreenType.NotificationScreen:
                     menuCanvasManager.OpenCanvas(MenuCanvasType.NotificationMessageMenu);
                     break;
+
+
+                case ScreenType.ExperimentProcessMenu:
+                    menuCanvasManager.OpenCanvas(MenuCanvasType.ExperimentProcessMenu);
+                    break;
             }
         }
 

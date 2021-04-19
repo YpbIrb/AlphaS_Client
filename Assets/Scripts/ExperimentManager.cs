@@ -24,10 +24,9 @@ namespace Assets.Scripts
 
         DataManager dataManager;
         int curr_module_order;
+        int last_module_order;
 
         //Пайпа тоже должна быть где-то тут
-
-
 
 
         public ExperimentManager(Experiment experiment)
@@ -42,20 +41,33 @@ namespace Assets.Scripts
 
             firstParticipant = new ParticipantInExperiment();
             secondParticipant = new ParticipantInExperiment();
-
             //Открываем пайп с названием AlphaS, который должен получать Dictionary <string string>, засериалайзеный в json 
         }
 
         public ExperimentManager()
         {
+            applicationController = ApplicationController.GetInstance();
+            applicationView = ApplicationView.GetInstance();
+            dataManager = DataManager.GetInstance();
+            canvasManager = MenuCanvasManager.GetInstance();
+            experimentProcessCanvasController = canvasManager.GetExperimentProcessCanvasController();
             firstParticipant = new ParticipantInExperiment();
             secondParticipant = new ParticipantInExperiment();
+            curr_module_order = 1;
         }
 
         public void StartExperiment()
         {
+            foreach(ModuleInExperiment module in experiment.Modules)
+            {
+                if (module.ModuleOrder > last_module_order)
+                    last_module_order = module.ModuleOrder;
+            }
+            
             curr_module_order = 1;
             ModuleInExperiment curr_module = GetModuleInExperimentByOrder(curr_module_order);
+            Debug.Log(curr_module);
+            ExecuteModule(curr_module);
             //Итерируемся по всем модулям, и ждем закрытия предидущего, прежде чем запускать следующий
 
 
@@ -76,6 +88,11 @@ namespace Assets.Scripts
         public void ContinueExperiment()
         {
             curr_module_order++;
+            if(curr_module_order >= last_module_order)
+            {
+                experimentProcessCanvasController.FinalModuleOn();
+            } 
+
             ModuleInExperiment curr_module = GetModuleInExperimentByOrder(curr_module_order);
             if(curr_module == null)
             {
@@ -100,8 +117,10 @@ namespace Assets.Scripts
             System.Diagnostics.Process myProcess = new System.Diagnostics.Process();
             Module module = GetModuleByName(moduleInExperiment.ModuleName);
             myProcess.StartInfo.FileName = "F:\\Modules\\" +module.PathToExe + ".exe.lnk";
-
-            foreach(KeyValuePair<string, string> pair in moduleInExperiment.InputValues)
+            myProcess.StartInfo.CreateNoWindow = false;
+            myProcess.StartInfo.UseShellExecute = true;
+            myProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+            foreach (KeyValuePair<string, string> pair in moduleInExperiment.InputValues)
             {
                 myProcess.StartInfo.Arguments += pair.Key + "=" + pair.Value+" ";
             }
@@ -118,7 +137,6 @@ namespace Assets.Scripts
                 experimentProcessCanvasController.SetCurrentModuleCondition("Esception while opening " + myProcess.StartInfo.FileName);
                 Debug.Log(e);
             }
-
         }
 
         private ModuleInExperiment GetModuleInExperimentByOrder(int order)
@@ -152,7 +170,6 @@ namespace Assets.Scripts
             }
             return res;
         }
-
 
         public void SetParticipantId(int part_num, int id)
         {
@@ -198,7 +215,6 @@ namespace Assets.Scripts
             }
         }
 
-
         public Experiment GetFinalExperimentInfo() 
         {
             if(experiment.FirstParticipant == null)
@@ -209,8 +225,6 @@ namespace Assets.Scripts
 
             return experiment;
         }
-
-
 
     }
 

@@ -13,7 +13,7 @@ namespace Assets.Scripts.Model
     {
 
         [JsonProperty("Participant_Id")]
-        public string ParticipantId { get; set; }
+        public int ParticipantId { get; set; }
 
         [JsonProperty("Gender")]
         public string Gender { get; set; }
@@ -35,7 +35,19 @@ namespace Assets.Scripts.Model
             AdditionalInfo = additionalInfo;
         }
 
+        [JsonConstructor]
+        public Participant(int participantId, string gender, DateTime birthDate, string nationality, string additionalInfo)
+        {
+            ParticipantId = participantId;
+            Gender = gender;
+            BirthDate = birthDate;
+            Nationality = nationality;
+            AdditionalInfo = additionalInfo;
+        }
 
-
+        public Participant(int participantId)
+        {
+            ParticipantId = participantId;
+        }
     }
 }

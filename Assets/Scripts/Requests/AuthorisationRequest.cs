@@ -11,7 +11,7 @@ namespace Assets.Scripts.Requests
 
     public class AuthorisationRequest
     {
-        [JsonProperty("ID")]
+        [JsonProperty("Participant_Id")]
         string ID { get; set; }
 
         public AuthorisationRequest(string iD)

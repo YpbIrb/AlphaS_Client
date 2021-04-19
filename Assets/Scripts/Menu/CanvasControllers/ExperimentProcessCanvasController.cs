@@ -17,6 +17,11 @@ namespace Assets.Scripts.Menu
         [SerializeField]
         GameObject CurrentModuleConditionTextField;
 
+        [SerializeField]
+        GameObject ContinueExperimentButton;
+
+        [SerializeField]
+        GameObject FinishExperimentButton;
 
 
         private const string name_base = "Current Module : ";
@@ -27,6 +32,7 @@ namespace Assets.Scripts.Menu
         {
             Debug.Log("In Awake in ExperimentProcessCanvasController");
             this.menuCanvasType = MenuCanvasType.ExperimentProcessMenu;
+            FinishExperimentButton.SetActive(false);
         }
 
         public void SetCurrentModuleName(string moduleName)
@@ -42,6 +48,12 @@ namespace Assets.Scripts.Menu
         public void SetCurrentModuleOrder(int order)
         {
             CurrentModuleConditionTextField.GetComponent<TextMeshProUGUI>().text = order_base + order;
+        }
+
+        public void FinalModuleOn()
+        {
+            ContinueExperimentButton.SetActive(false);
+            FinishExperimentButton.SetActive(true);
         }
 
     }

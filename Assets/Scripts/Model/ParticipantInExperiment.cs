@@ -32,6 +32,16 @@ namespace Assets.Scripts.Model
             AdditionalInfo = additionalInfo;
         }
 
+        [JsonConstructor]
+        public ParticipantInExperiment(int participantId, bool intoxication, bool periods, bool headInjury, string additionalInfo)
+        {
+            ParticipantId = participantId;
+            Intoxication = intoxication;
+            Periods = periods;
+            HeadInjury = headInjury;
+            AdditionalInfo = additionalInfo;
+        }
+
         public ParticipantInExperiment()
         {
         }

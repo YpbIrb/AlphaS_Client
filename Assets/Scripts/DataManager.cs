@@ -24,30 +24,24 @@ namespace Assets.Scripts
         }
 
 
-        public int Register(RegistrationRequest registrationInfo)
+        public Participant Register(RegistrationRequest registrationInfo)
         {
             string registration_json = JsonConvert.SerializeObject(registrationInfo);
             Participant part = netManager.SendRegistrationRequestAsync(registration_json);
             if(part == null)
             {
-                return 0;
+                return part;
             }
 
-            int part_id;
-            string partId_string = part.ParticipantId;
-            partId_string = new string(partId_string.Where(c => char.IsDigit(c)).ToArray());
-
-            bool parse_success = int.TryParse(partId_string, out part_id);
-
-            return part_id;
+            return part;
         }
 
-        public int Login(AuthorisationRequest authorisationInfo)
-        {
-            string authprosation_json = JsonConvert.SerializeObject(authorisationInfo);
-            Debug.Log("In Login in DataManager");
-            Debug.Log("Json : " + authprosation_json);
-            return 0;
+        public Participant Login(int id)
+        { 
+            //string authprosation_json = JsonConvert.SerializeObject(authorisationInfo);
+            Participant part = netManager.GetParticipantRequest(id);
+
+            return part;
         }
 
         public Experiment GetExperimentById(int id)
@@ -65,6 +59,16 @@ namespace Assets.Scripts
         {
             Module module = netManager.GetModuleRequest(moduleName);
             return module;
+        }
+
+        public int SendExperimentUpdate(Experiment experiment)
+        {
+            int id = experiment.ExperimentId;
+            string experiment_json = JsonConvert.SerializeObject(experiment);
+            Debug.Log(experiment_json);
+            int res = netManager.SendExperimentUpdateRequest(id, experiment_json);
+
+            return res;
         }
 
     }

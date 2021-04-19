@@ -20,10 +20,10 @@ namespace Assets.Scripts.Menu
         TMP_InputField BirthYearInputField;
 
         [SerializeField]
-        TMP_InputField BirthCountryInputField;
+        TMP_InputField NationalityInputField;
 
         [SerializeField]
-        TMP_InputField BirthCityInputField;
+        TMP_InputField AdditionInformationInputField;
 
         [SerializeField]
         TMP_Dropdown GenderDropdown;
@@ -54,9 +54,8 @@ namespace Assets.Scripts.Menu
 
             DateTime birth_date = GetBirthDate();   
 
-            RegistrationRequest res = new RegistrationRequest(GenderDropdown.GetComponent<TMP_Dropdown>().captionText.text, birth_date, BirthCityInputField.text, BirthCountryInputField.text) ;
-
-
+            RegistrationRequest res = new RegistrationRequest(birth_date, GenderDropdown.GetComponent<TMP_Dropdown>().captionText.text,
+                                                            NationalityInputField.text, AdditionInformationInputField.text) ;
 
             return res;
         }

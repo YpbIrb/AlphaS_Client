@@ -6,6 +6,8 @@ using UnityEngine;
 using System;
 using Assets.Scripts.Requests;
 using Assets.Scripts.Model;
+using System.Globalization;
+using System.Linq;
 
 namespace Assets.Scripts
 {
@@ -16,6 +18,7 @@ namespace Assets.Scripts
         DataManager dataManager;
         MenuCanvasManager canvasManager;
         ApplicationView applicationView;
+        ExperimentManager experimentManager;
 
         private int curr_identifying_participant;
 
@@ -27,6 +30,11 @@ namespace Assets.Scripts
             canvasManager = MenuCanvasManager.GetInstance();
             applicationView = ApplicationView.GetInstance();
             Debug.Log("App controller Awake");
+
+
+            experimentManager = new ExperimentManager();
+            experimentManager.AllModules = dataManager.GetAllModules(); ;
+            Debug.Log("experimentManager.AllModules.Count = " + experimentManager.AllModules.Count);
         }
 
 
@@ -40,7 +48,32 @@ namespace Assets.Scripts
         {
             //todo
             ExperimentIdCanvasController experimentIdCanvasController = canvasManager.GetExperimentIdCanvasController();
-            string experimentId = experimentIdCanvasController.GetExperimentId();
+
+            int experimentId_int;
+            string experimentId_string = experimentIdCanvasController.GetExperimentId();
+            experimentId_string = new string(experimentId_string.Where(c => char.IsLetter(c) || char.IsDigit(c)).ToArray());
+
+            Debug.Log("Getting experiment with id = " + experimentId_string);
+
+
+            //todo перести валидацию в канвас контроллер
+
+
+            bool parse_success = int.TryParse(experimentId_string, out experimentId_int);
+
+            if (!parse_success)
+            {
+                applicationView.ShowNotificationMessage("Неудалось распарсить Id эксперимента");
+                applicationView.OpenScreen(ScreenType.ExperimentIdEnteringMenu);
+            }
+
+            Experiment experiment = dataManager.GetExperimentById(experimentId_int);
+            
+            experimentManager.experiment = experiment;
+
+            Debug.Log(experiment.ToString());
+
+
 
             applicationView.OpenScreen(ScreenType.MainMenu);
         }
@@ -73,15 +106,22 @@ namespace Assets.Scripts
             ParticipantRegistrationCanvasController registrationCanvasController = canvasManager.GetParticipantRegistrationCanvasController();
             RegistrationRequest registrationInfo = registrationCanvasController.GetRegistrationInfo();
             int res = dataManager.Register(registrationInfo);
+
             if (res != 0)
             {
-                //todo
-            }
 
+                applicationView.ShowNotificationMessage("Ваш ID : " + res);
+                experimentManager.SetParticipantId(curr_identifying_participant, res);
+                applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+            }
+            else
+            {
+                applicationView.ShowNotificationMessage("Неудачная попытка регистрации. Не удалось соединиться с сервером");
+            }
             //todo сделать нотификейшн с выданным id, чтобы чел точно его записал где-нибудь
             //todo Добавить в эксперимент манагер инфу про партисипанта
 
-            applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+            
         }
 
         public void OnAuthorisationSend()
@@ -107,25 +147,51 @@ namespace Assets.Scripts
             ParticipantInExperimentCanvasController participantInExperimentCanvasController = canvasManager.GetParticipantInExperimentCanvasController();
             ParticipantInExperiment participantInExperiment = participantInExperimentCanvasController.GetParticipantInExperiment();
 
+            experimentManager.SetParticipantInExperimentInfo(curr_identifying_participant, participantInExperiment);
+
             //todo сделать сохранение этой инфы в эксперимент манагере
 
             applicationView.OpenScreen(ScreenType.MainMenu);
         }
 
-        public void OnBaseAlphaStart()
-        {
-           System.Diagnostics.Process myProcess = new System.Diagnostics.Process();
-
-           myProcess.StartInfo.FileName = "F:\\TestModule.exe.lnk";
-           myProcess.Start();
-
-        }
-
-
         public void StartExperiment()
         {
+            if (experimentManager != null && experimentManager.experiment != null)
+            {
 
+                Debug.Log("Starting ExecuteExperiment");
+                experimentManager.StartExperiment();
+                applicationView.OpenScreen(ScreenType.ExperimentProcessMenu);
+            }
+            else
+            {
+                applicationView.ShowNotificationMessage("No Experiment to start");
+            }
         }
+
+        public void ContinueExperiment()
+        {
+            //todo
+            if (experimentManager != null && experimentManager.experiment != null)
+            {
+
+                Debug.Log("Starting ExecuteExperiment");
+                experimentManager.StartExperiment();
+            }
+            else
+            {
+                applicationView.ShowNotificationMessage("No Experiment to start");
+            }
+        }
+
+        public void FinishExperiment()
+        {
+            //todo отправка данных, + чтобы в нотификации говорилось о том, куда данные сохранены(локально, или на сервачок)
+
+            applicationView.ShowNotificationMessage("Эксперимент завершен");
+            applicationView.OpenScreen(ScreenType.MainMenu);
+        }
+
 
         public void OnCloseError()
         {

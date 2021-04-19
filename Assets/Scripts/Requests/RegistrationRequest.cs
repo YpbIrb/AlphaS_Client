@@ -11,27 +11,24 @@ namespace Assets.Scripts.Requests
     
     public class RegistrationRequest
     {
-        [JsonProperty("Gender")]
-        string Gender { get; set; }
-
         [JsonProperty("Birth_Date")]
-        DateTime BirthDate { get; set; }
+        public DateTime Birth_Date { get; set; }
 
-        [JsonProperty("Birth_City")]
-        string BirthCity { get; set; }
+        [JsonProperty("Gender")]
+        public string Gender { get; set; }
 
-        [JsonProperty("Birth_Country")]
-        string BirthCountry { get; set; }
+        [JsonProperty("Nationality")]
+        public string Nationality { get; set; }
 
-        public RegistrationRequest(string gender, DateTime birthDate, string birthCity, string birthCountry)
+        [JsonProperty("Additional_Info")]
+        public string AdditionalInfo { get; set; }
+
+        public RegistrationRequest(DateTime birth_Date, string gender, string nationality, string additionalInfo)
         {
+            Birth_Date = birth_Date;
             Gender = gender;
-            BirthDate = birthDate;
-            BirthCity = birthCity;
-            BirthCountry = birthCountry;
+            Nationality = nationality;
+            AdditionalInfo = additionalInfo;
         }
-
-
-
     }
 }

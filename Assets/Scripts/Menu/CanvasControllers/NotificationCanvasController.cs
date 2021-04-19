@@ -10,7 +10,8 @@ namespace Assets.Scripts.Menu
     public class NotificationCanvasController : CanvasController
     {
 
-        TMP_Text Notification_Text;
+        [SerializeField]
+        GameObject NotificationText;
 
         private string Notification_MESSAGE;
 
@@ -18,13 +19,7 @@ namespace Assets.Scripts.Menu
         {
             Notification_MESSAGE = message;
 
-            if (Notification_Text == null)
-            {
-                Debug.Log("Notification_Text = NULL");
-            }
-
-
-            Notification_Text.text = Notification_MESSAGE;
+            NotificationText.GetComponent<TextMeshProUGUI>().text = Notification_MESSAGE;
         }
 
         protected void Awake()
@@ -32,8 +27,6 @@ namespace Assets.Scripts.Menu
             Debug.Log("In Awake in NotificationMessageMenu");
             this.menuCanvasType = MenuCanvasType.NotificationMessageMenu;
             Notification_MESSAGE = "Default notification message";
-            Notification_Text = GetComponentInChildren<TMPro.TMP_Text>();
-            Notification_Text.text = Notification_MESSAGE;
 
         }
 

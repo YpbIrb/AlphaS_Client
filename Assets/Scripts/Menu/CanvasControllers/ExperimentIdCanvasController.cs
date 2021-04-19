@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Assets.Scripts.Menu
 {
     public class ExperimentIdCanvasController : CanvasController
     {
+
+        [SerializeField]
+        GameObject IDInputField;
+
         protected void Awake()
         {
             Debug.Log("In Awake in ExperimentIdCanvasController");
@@ -14,7 +19,7 @@ namespace Assets.Scripts.Menu
 
         public string GetExperimentId()
         {
-            return "ExperimentId";
+            return IDInputField.GetComponent<TextMeshProUGUI>().text.Trim();
         }
     }
 }

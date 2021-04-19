@@ -17,7 +17,8 @@ namespace Assets.Scripts.Menu
         ParticipantAuthorisationMenu,
         ParticipantRegistrationMenu,
         ParticipantInExperimentMenu,
-        NotificationMessageMenu
+        NotificationMessageMenu,
+        ExperimentProcessMenu
     }
 
 
@@ -103,6 +104,12 @@ namespace Assets.Scripts.Menu
         {
             return (ParticipantInExperimentCanvasController)GetCanvasControllerByType(MenuCanvasType.ParticipantInExperimentMenu);
         }
+
+        public ExperimentProcessCanvasController GetExperimentProcessCanvasController()
+        {
+            return (ExperimentProcessCanvasController)GetCanvasControllerByType(MenuCanvasType.ExperimentProcessMenu);
+        }
+
 
         public NotificationCanvasController GetNotificationCanvasController()
         {

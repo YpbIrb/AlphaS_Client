@@ -19,6 +19,7 @@ namespace Assets.Scripts.Menu
         ExperimentIdEnter_Start,
         ExperimentIdEnter_Send,
         Experiment_Start,
+        Experiment_Continue,
         Notification_close
     }
 
@@ -83,6 +84,10 @@ namespace Assets.Scripts.Menu
 
                 case ButtonType.Experiment_Start:
                     Notify += applicationController.StartExperiment;
+                    break;
+
+                case ButtonType.Experiment_Continue:
+                    Notify += applicationController.ContinueExperiment;
                     break;
 
                 case ButtonType.Notification_close:

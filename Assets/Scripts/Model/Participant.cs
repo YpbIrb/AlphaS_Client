@@ -12,27 +12,27 @@ namespace Assets.Scripts.Model
     public class Participant
     {
 
-        [JsonProperty("ID")]
-        string ID { get; set; }
+        [JsonProperty("Participant_Id")]
+        public string ParticipantId { get; set; }
 
         [JsonProperty("Gender")]
-        string Gender { get; set; }
+        public string Gender { get; set; }
 
         [JsonProperty("Birth_Date")]
-        DateTime BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
-        [JsonProperty("Birth_City")]
-        string BirthCity { get; set; }
+        [JsonProperty("Nationality")]
+        public string Nationality { get; set; }
 
-        [JsonProperty("Birth_Country")]
-        string BirthCountry { get; set; }
+        [JsonProperty("Additional_Info")]
+        public string AdditionalInfo { get; set; }
 
-        public Participant(string gender, DateTime birthDate, string birthCity, string birthCountry)
+        public Participant(string gender, DateTime birthDate, string nationality, string additionalInfo)
         {
             Gender = gender;
             BirthDate = birthDate;
-            BirthCity = birthCity;
-            BirthCountry = birthCountry;
+            Nationality = nationality;
+            AdditionalInfo = additionalInfo;
         }
 
 

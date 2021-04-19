@@ -18,7 +18,8 @@ namespace Assets.Scripts
         ParticipantInExperimentMenu,
         ExperimentIdEnteringMenu,
         MainMenu,
-        NotificationScreen
+        NotificationScreen,
+        ExperimentProcessMenu
     }
 
     class ApplicationView : Singleton<ApplicationView>

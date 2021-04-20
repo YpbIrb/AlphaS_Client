@@ -115,7 +115,11 @@ namespace Assets.Scripts.Menu
         {
             return (NotificationCanvasController)GetCanvasControllerByType(MenuCanvasType.NotificationMessageMenu);
         }
-        
+
+        public MainMenuCanvasController GetMainMenuCanvasController()
+        {
+            return (MainMenuCanvasController)GetCanvasControllerByType(MenuCanvasType.MainMenu);
+        }
 
         public void DisableMenu()
         {

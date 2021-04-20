@@ -49,5 +49,10 @@ namespace Assets.Scripts.Model
         {
             ParticipantId = participantId;
         }
+
+        public bool IsFemale()
+        {
+            return Gender.Contains("Ж");
+        }
     }
 }

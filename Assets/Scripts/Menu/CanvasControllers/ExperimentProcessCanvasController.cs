@@ -24,9 +24,9 @@ namespace Assets.Scripts.Menu
         GameObject FinishExperimentButton;
 
 
-        private const string name_base = "Current Module : ";
-        private const string condition_base = "Condition : ";
-        private const string order_base = "Order : ";
+        private const string name_base = "Текущий модуль : ";
+        private const string condition_base = "Состояние модуля : ";
+        private const string order_base = "Порядок модуля : ";
 
         protected void Awake()
         {
@@ -47,7 +47,7 @@ namespace Assets.Scripts.Menu
 
         public void SetCurrentModuleOrder(int order)
         {
-            CurrentModuleConditionTextField.GetComponent<TextMeshProUGUI>().text = order_base + order;
+            CurrentModuleOrderTextField.GetComponent<TextMeshProUGUI>().text = order_base + order;
         }
 
         public void FinalModuleOn()

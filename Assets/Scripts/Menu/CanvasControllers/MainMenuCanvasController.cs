@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Menu
 {
@@ -15,6 +14,5 @@ namespace Assets.Scripts.Menu
             Debug.Log("In Awake in MainCanvasController");
             this.menuCanvasType = MenuCanvasType.MainMenu;
         }
-
     }
 }

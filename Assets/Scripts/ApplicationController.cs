@@ -68,12 +68,12 @@ namespace Assets.Scripts
 
             Experiment experiment = dataManager.GetExperimentById(experimentId_int);
             
+
+            //todo Проверка на то, что вернулось нормально(что нашло эксперимент)
+
             experimentManager.experiment = experiment;
 
             Debug.Log(experiment.ToString());
-
-
-
             applicationView.OpenScreen(ScreenType.MainMenu);
         }
 
@@ -109,6 +109,11 @@ namespace Assets.Scripts
             if (res != null)
             {
                 //todo проверка пола, и если M, то выключать поле Period
+                if (!res.IsFemale())
+                    canvasManager.GetParticipantInExperimentCanvasController().HidePeriod();
+                else
+                    canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
+
 
                 applicationView.ShowNotificationMessage("Ваш ID : " + res.ParticipantId);
                 experimentManager.SetParticipantId(curr_identifying_participant, res.ParticipantId);
@@ -134,6 +139,12 @@ namespace Assets.Scripts
             {
                 //todo проверка пола, и если M, то выключать поле Period
                 experimentManager.SetParticipantId(curr_identifying_participant, res.ParticipantId);
+
+                if (!res.IsFemale())
+                    canvasManager.GetParticipantInExperimentCanvasController().HidePeriod();
+                else
+                    canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
+
                 applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
 
                 //todo
@@ -175,7 +186,8 @@ namespace Assets.Scripts
             }
             else
             {
-                applicationView.ShowNotificationMessage("No Experiment to start");
+                applicationView.ShowNotificationMessage("Не выбран эксперимент");
+                applicationView.OpenScreen(ScreenType.MainMenu);
             }
         }
 

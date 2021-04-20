@@ -93,6 +93,7 @@ namespace Assets.Scripts
             {
                 experimentProcessCanvasController.SetCurrentModuleName("No Module");
                 experimentProcessCanvasController.SetCurrentModuleCondition("Can't find module with order " + curr_module_order);
+                
             }
             else{
                 ExecuteModule(curr_module);

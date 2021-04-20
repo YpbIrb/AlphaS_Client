@@ -23,6 +23,9 @@ namespace Assets.Scripts.Menu
         GameObject PeriodsDropdown;
 
         [SerializeField]
+        GameObject PeriodsDropdownWithHeader;
+
+        [SerializeField]
         TMP_InputField AdditionalInformationInputField;
 
         protected void Awake()
@@ -35,13 +38,13 @@ namespace Assets.Scripts.Menu
         {
             ParticipantInExperiment res = new ParticipantInExperiment();
 
-            if (IntoxicationDropdown.GetComponent<TMP_Dropdown>().captionText.text == "Yes")
+            if (IntoxicationDropdown.GetComponent<TMP_Dropdown>().captionText.text == "Да")
                 res.Intoxication = true;
 
-            if (HeadInjuryDropdown.GetComponent<TMP_Dropdown>().captionText.text == "Yes")
+            if (HeadInjuryDropdown.GetComponent<TMP_Dropdown>().captionText.text == "Да")
                 res.HeadInjury = true;
 
-            if (PeriodsDropdown.GetComponent<TMP_Dropdown>().captionText.text == "Yes")
+            if (PeriodsDropdown.GetComponent<TMP_Dropdown>().captionText.text == "Да")
                 res.Periods = true;
 
             res.AdditionalInfo = AdditionalInformationInputField.text;
@@ -49,6 +52,17 @@ namespace Assets.Scripts.Menu
             //todo
             return res;
         }
+
+        public void HidePeriod()
+        {
+            PeriodsDropdownWithHeader.SetActive(false);
+        }
+
+        public void ShowPeriod()
+        {
+            PeriodsDropdownWithHeader.SetActive(true);
+        }
+
 
     }
 }

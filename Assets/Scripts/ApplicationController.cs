@@ -37,7 +37,6 @@ namespace Assets.Scripts
             Debug.Log("experimentManager.AllModules.Count = " + experimentManager.AllModules.Count);
         }
 
-
         public void OnExperimentIdEnterStart()
         {
             Debug.Log("In OnExperimentIdEnterStart");

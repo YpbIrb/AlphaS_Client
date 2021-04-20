@@ -3,6 +3,9 @@ using Assets.Scripts.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Pipes;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -26,6 +29,8 @@ namespace Assets.Scripts
         int curr_module_order;
         int last_module_order;
 
+        NamedPipeResultsGetter namedPipeResultsGetter;
+
         //Пайпа тоже должна быть где-то тут
 
 
@@ -38,9 +43,11 @@ namespace Assets.Scripts
             experimentProcessCanvasController = canvasManager.GetExperimentProcessCanvasController();
             this.experiment = experiment;
             curr_module_order = 1;
-
             firstParticipant = new ParticipantInExperiment();
             secondParticipant = new ParticipantInExperiment();
+
+            namedPipeResultsGetter = new NamedPipeResultsGetter();
+
             //Открываем пайп с названием AlphaS, который должен получать Dictionary <string string>, засериалайзеный в json 
         }
 
@@ -53,11 +60,13 @@ namespace Assets.Scripts
             experimentProcessCanvasController = canvasManager.GetExperimentProcessCanvasController();
             firstParticipant = new ParticipantInExperiment();
             secondParticipant = new ParticipantInExperiment();
+            namedPipeResultsGetter = new NamedPipeResultsGetter();
             curr_module_order = 1;
         }
 
         public void StartExperiment()
         {
+            experiment.StartTime = DateTime.Now;
             foreach(ModuleInExperiment module in experiment.Modules)
             {
                 if (module.ModuleOrder > last_module_order)
@@ -69,20 +78,6 @@ namespace Assets.Scripts
             Debug.Log(curr_module);
             ExecuteModule(curr_module);
             //Итерируемся по всем модулям, и ждем закрытия предидущего, прежде чем запускать следующий
-
-
-            /*
-            while(curr_module != null)
-            {
-                Debug.Log("Executeing module with order = " + curr_module.ModuleOrder);
-
-                ExecuteModule(curr_module);
-                curr_module_order++;
-                curr_module = GetModuleInExperimentByOrder(curr_module_order);
-            }
-            */
-            //Debug.Log("All Modules executed");
-
         }
 
         public void ContinueExperiment()
@@ -110,6 +105,8 @@ namespace Assets.Scripts
             //Сначала запустить экзе с нужными параметрами, а потом добавить слушателя на пипу
             //После получения инфу из пипы, запихиваем её в соответствующий ModuleInExperiment
 
+            var resultsTask = namedPipeResultsGetter.GetModuleResults(moduleInExperiment.ModuleName);
+
             experimentProcessCanvasController.SetCurrentModuleName(moduleInExperiment.ModuleName);
             experimentProcessCanvasController.SetCurrentModuleCondition("Starting");
             experimentProcessCanvasController.SetCurrentModuleOrder(curr_module_order);
@@ -124,17 +121,24 @@ namespace Assets.Scripts
             {
                 myProcess.StartInfo.Arguments += pair.Key + "=" + pair.Value+" ";
             }
+            Debug.Log(moduleInExperiment.ModuleName + " module Arguments : " + myProcess.StartInfo.Arguments);
 
             try
             {
+                moduleInExperiment.StartTime = DateTime.Now;
                 myProcess.Start();
                 experimentProcessCanvasController.SetCurrentModuleCondition("Started");
                 myProcess.WaitForExit();
+                moduleInExperiment.FinishTime = DateTime.Now;
+                //!!!!!!!!!!
+                Dictionary<string, string> module_res = new Dictionary<string, string>(namedPipeResultsGetter.results);
+                moduleInExperiment.OutputValues = module_res;
+                //namedPipeResultsGetter.ClearResults();
                 experimentProcessCanvasController.SetCurrentModuleCondition("Finished");
             }
             catch (Exception e)
             {
-                experimentProcessCanvasController.SetCurrentModuleCondition("Esception while opening " + myProcess.StartInfo.FileName);
+                experimentProcessCanvasController.SetCurrentModuleCondition("Exception while opening " + myProcess.StartInfo.FileName);
                 Debug.Log(e);
             }
         }
@@ -217,16 +221,81 @@ namespace Assets.Scripts
 
         public Experiment GetFinalExperimentInfo() 
         {
-            if(experiment.FirstParticipant == null)
+            experiment.FinishTime = DateTime.Now;
+
+            if (experiment.FirstParticipant.ParticipantId == 0)
                 experiment.FirstParticipant = firstParticipant;
 
-            if (experiment.SecondParticipant == null)
+            if (experiment.SecondParticipant.ParticipantId == 0)
                 experiment.SecondParticipant = secondParticipant;
 
             return experiment;
         }
 
     }
+
+
+    public class NamedPipeResultsGetter
+    {
+        public const string pipe_name = "AlphaS";
+        public NamedPipeServerStream namedPipeServerStream;
+        public Dictionary<string, string> results;
+
+
+        public NamedPipeResultsGetter()
+        {
+            results = new Dictionary<string, string>();
+        }
+
+        public async Task<Dictionary<string, string>> GetModuleResults(string moduleName)
+        {
+            results.Clear();
+            await Task.Factory.StartNew(() =>
+            {
+                namedPipeServerStream = new NamedPipeServerStream(pipe_name, PipeDirection.In);
+                using (StreamReader sr = new StreamReader(namedPipeServerStream))
+                {
+                    string temp;
+                    Debug.Log("Waiting for results of module " + moduleName + "in GetModuleResults");
+                    namedPipeServerStream.WaitForConnection();
+                    Debug.Log("ClientConnected");
+                    // Wait for 'sync message' from the server.
+                    do
+                    {
+                        temp = sr.ReadLine();
+                    }
+                    while (!temp.StartsWith(moduleName));
+
+                    while ((temp = sr.ReadLine()) != "End")
+                    {
+                        KeyValuePair<string, string> newValuePair = ParseLine(temp);
+                        if (newValuePair.Key != "Error while splitting")
+                            results.Add(newValuePair.Key, newValuePair.Value);
+                        Debug.Log("Get from " + moduleName + " : " + temp);
+                    }
+                    //namedPipeServerStream.
+                }
+            });
+            
+            return results;
+
+        }
+
+        private KeyValuePair<string, string> ParseLine(string line)
+        {
+            string[] splitted = line.Split('=');
+            if (splitted.Length == 2)
+            {
+                return new KeyValuePair<string, string>(splitted[0], splitted[1]);
+            }
+            else
+            {
+                return new KeyValuePair<string, string>("Error while splitting", "");
+            }
+        }
+
+    }
+
 
 }
 

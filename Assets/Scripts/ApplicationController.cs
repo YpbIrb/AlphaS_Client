@@ -48,33 +48,27 @@ namespace Assets.Scripts
             //todo
             ExperimentIdCanvasController experimentIdCanvasController = canvasManager.GetExperimentIdCanvasController();
 
-            int experimentId_int;
-            string experimentId_string = experimentIdCanvasController.GetExperimentId();
-            experimentId_string = new string(experimentId_string.Where(c => char.IsLetter(c) || char.IsDigit(c)).ToArray());
-
-            Debug.Log("Getting experiment with id = " + experimentId_string);
-
-
-            //todo перести валидацию в канвас контроллер
-
-
-            bool parse_success = int.TryParse(experimentId_string, out experimentId_int);
-
-            if (!parse_success)
-            {
-                applicationView.ShowNotificationMessage("Неудалось распарсить Id эксперимента");
-                applicationView.OpenScreen(ScreenType.ExperimentIdEnteringMenu);
-            }
-
-            Experiment experiment = dataManager.GetExperimentById(experimentId_int);
+            int experiment_id = experimentIdCanvasController.GetExperimentId(); ;
             
 
-            //todo Проверка на то, что вернулось нормально(что нашло эксперимент)
+            if (experiment_id == 0)
+            {
+                //applicationView.ShowNotificationMessage("Неудалось распарсить Id эксперимента");
+                //applicationView.OpenScreen(ScreenType.ExperimentIdEnteringMenu);
+            }
+            else
+            {
+                Experiment experiment = dataManager.GetExperimentById(experiment_id);
 
-            experimentManager.experiment = experiment;
+                //todo Проверка на то, что вернулось нормально(что нашло эксперимент)
 
-            Debug.Log(experiment.ToString());
-            applicationView.OpenScreen(ScreenType.MainMenu);
+                experimentManager.experiment = experiment;
+
+                Debug.Log(experiment.ToString());
+                applicationView.OpenScreen(ScreenType.MainMenu);
+            }
+
+            
         }
 
         public void StartFirstParticipantIdentification()
@@ -98,7 +92,6 @@ namespace Assets.Scripts
             applicationView.OpenScreen(ScreenType.ParticipantAuthorisationMenu);
         }
 
-
         public void OnRegistrationSend()
         {
             
@@ -115,7 +108,7 @@ namespace Assets.Scripts
                     canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
 
 
-                applicationView.ShowNotificationMessage("Ваш ID : " + res.ParticipantId);
+                applicationView.ShowNotificationMessage("Ваш ID : " + res.ParticipantId + ". Запишите его, чтобы, при повторной работе с системой, авторизоваться с его помощью.");
                 experimentManager.SetParticipantId(curr_identifying_participant, res.ParticipantId);
                 applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
             }
@@ -135,17 +128,40 @@ namespace Assets.Scripts
             int part_id = authorisationCanvasController.GetAuthorisationId();
 
             Participant res = dataManager.Login(part_id);
-            if (res != null)
+            switch (res.ParticipantId)
+            {
+                case -1:
+                    applicationView.ShowNotificationMessage("Ошибка в авторизации по данному Id. " +
+                        "Попробуете проверить правильность ввода, или зарегистрируйтесь");
+                    applicationView.OpenScreen(ScreenType.MainMenu);
+                    break;
+
+                case 0:
+                    applicationView.ShowNotificationMessage("Внутренние проблемы в работе сервера. " +
+                        "Подтвердить существование пользователя с данным Id не получилось. Дальнейшая работа предполагает, что id было введено верно.");
+                    experimentManager.SetParticipantId(curr_identifying_participant, part_id);
+                    canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
+                    applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+                    break;
+
+                default:
+                    experimentManager.SetParticipantId(curr_identifying_participant, res.ParticipantId);
+
+                    if (!res.IsFemale())
+                        canvasManager.GetParticipantInExperimentCanvasController().HidePeriod();
+                    else
+                        canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
+                    applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+                    break;
+            }
+
+            
+            /*
+
+            if (res.ParticipantId != -1)
             {
                 //todo проверка пола, и если M, то выключать поле Period
-                experimentManager.SetParticipantId(curr_identifying_participant, res.ParticipantId);
-
-                if (!res.IsFemale())
-                    canvasManager.GetParticipantInExperimentCanvasController().HidePeriod();
-                else
-                    canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
-
-                applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+                
 
                 //todo
             }
@@ -159,7 +175,7 @@ namespace Assets.Scripts
                     applicationView.ShowNotificationMessage("Проблемы при авторизации(не связаны именно с этим id)");
                 }
             }
-
+            */
             //todo Добавить в эксперимент манагер инфу про партисипанта
 
         }
@@ -171,7 +187,15 @@ namespace Assets.Scripts
 
             experimentManager.SetParticipantInExperimentInfo(curr_identifying_participant, participantInExperiment);
 
-            //todo сделать сохранение этой инфы в эксперимент манагере
+            if(curr_identifying_participant == 1)
+            {
+                applicationView.ShowNotificationMessage("Первый участник успешно добавлен.");
+            }
+            else
+            {
+                applicationView.ShowNotificationMessage("Второй участник успешно добавлен.");
+            }
+            
 
             applicationView.OpenScreen(ScreenType.MainMenu);
         }
@@ -209,14 +233,15 @@ namespace Assets.Scripts
             }
             else
             {
-                applicationView.ShowNotificationMessage("Эксперимент завершен. На сервер данные не загружены.");
+                applicationView.ShowNotificationMessage("Эксперимент завершен. Ошибка в связи с сервером, данные на сервер не загружены. " +
+                    "Повторная попытка загрузки будет при следующем включении приложения.");
             }
             
             applicationView.OpenScreen(ScreenType.MainMenu);
         }
 
 
-        public void OnCloseError()
+        public void OnCloseNotification()
         {
             applicationView.CloseNotificationMessage();
         }

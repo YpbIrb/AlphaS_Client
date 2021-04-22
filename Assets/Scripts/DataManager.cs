@@ -36,11 +36,11 @@ namespace Assets.Scripts
             return part;
         }
 
+        //Возвращает партисипанта с id = -1, если PageNotFound, либо с 0, если другая ошибка сервера
         public Participant Login(int id)
         { 
             //string authprosation_json = JsonConvert.SerializeObject(authorisationInfo);
             Participant part = netManager.GetParticipantRequest(id);
-
             return part;
         }
 
@@ -67,7 +67,6 @@ namespace Assets.Scripts
             string experiment_json = JsonConvert.SerializeObject(experiment);
             Debug.Log(experiment_json);
             int res = netManager.SendExperimentUpdateRequest(id, experiment_json);
-
             return res;
         }
 

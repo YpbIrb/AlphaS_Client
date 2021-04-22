@@ -187,13 +187,17 @@ namespace Assets.Scripts
 
             else
             {
-                if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    Participant part = new Participant((-1));
-                }
-
                 UnityEngine.Debug.Log("Unseccessfull http GetParticipant request. StatusCode : " + response.StatusCode);
-                return null;
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return new Participant(-1);
+                }
+                else
+                {
+                    
+                    return new Participant(0); ;
+                }
+                
             }
         }
 

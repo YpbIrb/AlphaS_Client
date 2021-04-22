@@ -96,7 +96,7 @@ namespace Assets.Scripts.Menu
                     break;
 
                 case ButtonType.Notification_close:
-                    Notify += applicationController.OnCloseError;
+                    Notify += applicationController.OnCloseNotification;
                     break;
 
                    

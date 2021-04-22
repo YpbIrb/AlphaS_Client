@@ -15,6 +15,9 @@ namespace Assets.Scripts.Model
         [JsonProperty("Operator_Id")]
         public int OperatorId { get; set; }
 
+        [JsonProperty("Preset_Name")]
+        public string PresetName { get; set; }
+
         [JsonProperty("First_Participant")]
         public ParticipantInExperiment FirstParticipant { get; set; }
 

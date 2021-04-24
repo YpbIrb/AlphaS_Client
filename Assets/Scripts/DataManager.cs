@@ -24,7 +24,7 @@ namespace Assets.Scripts
         }
 
 
-        public Participant Register(RegistrationRequest registrationInfo)
+        public Participant Register(ParticipantRegistrationRequest registrationInfo)
         {
             string registration_json = JsonConvert.SerializeObject(registrationInfo);
             Participant part = netManager.SendRegistrationRequestAsync(registration_json);
@@ -69,6 +69,15 @@ namespace Assets.Scripts
             int res = netManager.SendExperimentUpdateRequest(id, experiment_json);
             return res;
         }
+
+        public int SendLogin(OperatorLoginRequest operatorLoginRequest)
+        {
+            string login_json = JsonConvert.SerializeObject(operatorLoginRequest);
+            Debug.Log(login_json);
+            int res = netManager.SendOperatorLoginRequest(login_json);
+            return res;
+        }
+
 
     }
 }

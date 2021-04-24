@@ -9,6 +9,7 @@ namespace Assets.Scripts.Menu
 
     public enum ButtonType
     {
+        OperatorLoginSend,
         ParticipantIdentificationTypeChoice_Authorisation,
         ParticipantIdentificationTypeChoice_Registration,
         ParticipantAuthorisation_Send,
@@ -47,6 +48,10 @@ namespace Assets.Scripts.Menu
 
             switch (buttonType)
             {
+                case ButtonType.OperatorLoginSend:
+                    Notify += applicationController.OnOperatorLoginSend;
+                    break;
+
                 case ButtonType.ExperimentIdEnter_Start:
                     Notify += applicationController.OnExperimentIdEnterStart;
                     break;
@@ -98,6 +103,8 @@ namespace Assets.Scripts.Menu
                 case ButtonType.Notification_close:
                     Notify += applicationController.OnCloseNotification;
                     break;
+
+
 
                    
                 default:

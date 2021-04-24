@@ -28,9 +28,9 @@ namespace Assets.Scripts.Menu
             IDInputField.onEndEdit.AddListener(delegate { ValidateInput(); });
         }
 
-        public AuthorisationRequest GetAuthorisationInfo()
+        public ParticipantAuthorisationRequest GetAuthorisationInfo()
         {
-            return new AuthorisationRequest(IDInputField.text);
+            return new ParticipantAuthorisationRequest(IDInputField.text);
         }
 
         public int GetAuthorisationId()

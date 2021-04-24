@@ -49,12 +49,12 @@ namespace Assets.Scripts.Menu
         }
 
 
-        public RegistrationRequest GetRegistrationInfo()
+        public ParticipantRegistrationRequest GetRegistrationInfo()
         {
 
             DateTime birth_date = GetBirthDate();   
 
-            RegistrationRequest res = new RegistrationRequest(birth_date, GenderDropdown.GetComponent<TMP_Dropdown>().captionText.text,
+            ParticipantRegistrationRequest res = new ParticipantRegistrationRequest(birth_date, GenderDropdown.GetComponent<TMP_Dropdown>().captionText.text,
                                                             NationalityInputField.text, AdditionInformationInputField.text) ;
 
             return res;

@@ -9,7 +9,7 @@ namespace Assets.Scripts.Requests
 {
 
     
-    public class RegistrationRequest
+    public class ParticipantRegistrationRequest
     {
         [JsonProperty("Birth_Date")]
         public DateTime Birth_Date { get; set; }
@@ -23,7 +23,7 @@ namespace Assets.Scripts.Requests
         [JsonProperty("Additional_Info")]
         public string AdditionalInfo { get; set; }
 
-        public RegistrationRequest(DateTime birth_Date, string gender, string nationality, string additionalInfo)
+        public ParticipantRegistrationRequest(DateTime birth_Date, string gender, string nationality, string additionalInfo)
         {
             Birth_Date = birth_Date;
             Gender = gender;

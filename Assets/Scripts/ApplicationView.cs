@@ -12,6 +12,7 @@ namespace Assets.Scripts
 
     enum ScreenType 
     {
+        OperatorLoginMenu,
         ParticipantIdentificationTypeChoiceMenu,
         ParticipantRegistrationMenu,
         ParticipantAuthorisationMenu,
@@ -67,6 +68,10 @@ namespace Assets.Scripts
         {
             switch (screenType)
             {
+                case ScreenType.OperatorLoginMenu:
+                    menuCanvasManager.OpenCanvas(MenuCanvasType.OperatorLoginMenu);
+                    break;
+
                 case ScreenType.MainMenu:
                     menuCanvasManager.OpenCanvas(MenuCanvasType.MainMenu);
                     break;

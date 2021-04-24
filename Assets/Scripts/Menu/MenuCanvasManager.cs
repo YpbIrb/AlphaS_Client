@@ -11,6 +11,7 @@ namespace Assets.Scripts.Menu
 {
     public enum MenuCanvasType
     {
+        OperatorLoginMenu,
         ExperimentIdEnteringMenu,
         MainMenu,
         ParticipantIdentificationTypeChoiceMenu,
@@ -42,7 +43,7 @@ namespace Assets.Scripts.Menu
                 Debug.Log("Deactivateing Canvas with type: " + x.menuCanvasType);
                 x.gameObject.SetActive(false);
             });
-            OpenCanvas(MenuCanvasType.MainMenu);
+            OpenCanvas(MenuCanvasType.OperatorLoginMenu);
         }
 
         public void OpenCanvas(MenuCanvasType _type)
@@ -120,6 +121,13 @@ namespace Assets.Scripts.Menu
         {
             return (MainMenuCanvasController)GetCanvasControllerByType(MenuCanvasType.MainMenu);
         }
+
+
+        public OperatorLoginCanvasController GetOperatorLoginCanvasController()
+        {
+            return (OperatorLoginCanvasController)GetCanvasControllerByType(MenuCanvasType.OperatorLoginMenu);
+        }
+
 
         public void DisableMenu()
         {

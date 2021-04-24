@@ -18,6 +18,7 @@ namespace Assets.Scripts
         private const string base_url = "http://localhost:8000/api";
         private const string participant_creation_url = "/Participants/Create";
         private const string participant_get_url = "/Participants/";
+        private const string operator_login_url = "/Accounts/login/";
 
         private const string experiment_get_url = "/Experiments/";
         private const string experiment_update_url = "/Experiments/Update/";
@@ -224,6 +225,37 @@ namespace Assets.Scripts
                 return -1;
             }
         }
+
+        public int SendOperatorLoginRequest(string loginRequest)
+        {
+            UnityEngine.Debug.Log("Sending OperatorLogin request, Url : " + base_url + operator_login_url);
+            //StringContent content = new StringContent(ModuleRequest, Encoding.UTF8, "application/json");
+
+            StringContent content = new StringContent(loginRequest, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = client.PostAsync(base_url + operator_login_url, content).Result;
+            if (response.IsSuccessStatusCode)
+            {
+
+                string responseBody = response.Content.ReadAsStringAsync().Result;
+                UnityEngine.Debug.Log("Login : responseBody" + responseBody);
+                var jpart = JObject.Parse(responseBody);
+                JToken jToken = jpart.GetValue("token");
+                string token = jToken.ToString();
+                UnityEngine.Debug.Log("token string : " + token);
+
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+
+                return 0;
+            }
+            else
+            {
+                UnityEngine.Debug.Log("Unseccessfull http OperatorLogin request. StatusCode : " + response.StatusCode);
+                return -1;
+            }
+
+        }
+        
+
 
     }
 }

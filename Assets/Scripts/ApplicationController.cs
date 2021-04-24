@@ -31,7 +31,7 @@ namespace Assets.Scripts
             applicationView = ApplicationView.GetInstance();
             Debug.Log("App controller Awake");
 
-
+            
             experimentManager = new ExperimentManager();
             experimentManager.AllModules = dataManager.GetAllModules(); ;
             Debug.Log("experimentManager.AllModules.Count = " + experimentManager.AllModules.Count);
@@ -96,7 +96,7 @@ namespace Assets.Scripts
         {
             
             ParticipantRegistrationCanvasController registrationCanvasController = canvasManager.GetParticipantRegistrationCanvasController();
-            RegistrationRequest registrationInfo = registrationCanvasController.GetRegistrationInfo();
+            ParticipantRegistrationRequest registrationInfo = registrationCanvasController.GetRegistrationInfo();
             Participant res = dataManager.Register(registrationInfo);
 
             if (res != null)
@@ -246,7 +246,16 @@ namespace Assets.Scripts
             applicationView.CloseNotificationMessage();
         }
 
+        public void OnOperatorLoginSend()
+        {
+            OperatorLoginCanvasController operatorLoginCanvasController = canvasManager.GetOperatorLoginCanvasController();
+            OperatorLoginRequest operatorLoginRequest = operatorLoginCanvasController.GetOperatorLoginRequest();
 
+
+            dataManager.SendLogin(operatorLoginRequest);
+
+            applicationView.OpenScreen(ScreenType.MainMenu);
+        }
 
 
     }

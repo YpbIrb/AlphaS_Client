@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 5
+  buttonType: 6
 --- !u!1001 &41684820
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -652,12 +652,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afcccf0ae7cf3894c9c4fdfc5359811a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuCanvasType: 7
+  menuCanvasType: 8
   CurrentModuleNameTextField: {fileID: 566745820}
   CurrentModuleOrderTextField: {fileID: 1455545207}
   CurrentModuleConditionTextField: {fileID: 916214038}
   ContinueExperimentButton: {fileID: 1769757793}
   FinishExperimentButton: {fileID: 1676665166}
+--- !u!114 &74144217 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4956630925837715752, guid: 288fb1895023a1a41acc599daef32f4b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1258845112}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &101693340 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4956630925837715752, guid: 288fb1895023a1a41acc599daef32f4b,
@@ -1349,7 +1361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 2
+  buttonType: 3
 --- !u!114 &304878834 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7288632552351280372, guid: 392164c9088c2c545a7848fc4793b467,
@@ -1598,7 +1610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00798a83e0a71864aa0895249edf11d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuCanvasType: 1
+  menuCanvasType: 2
 --- !u!1001 &345832338
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1776,7 +1788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31af4017e3c9bd34c85b9741d56db21d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuCanvasType: 3
+  menuCanvasType: 4
   IDInputField: {fileID: 1535409269}
   ValidationWarningText: {fileID: 1712546188}
   SendButton: {fileID: 304878834}
@@ -1938,7 +1950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 4
+  buttonType: 5
 --- !u!1 &385855663
 GameObject:
   m_ObjectHideFlags: 0
@@ -1991,9 +2003,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 601bf2543b4dd114ea612ae00afe352b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuCanvasType: 0
+  menuCanvasType: 1
   IDInputField: {fileID: 1586275828}
-  ValidationWarningText: {fileID: 0}
+  ValidationWarningText: {fileID: 361082251}
   SendButton: {fileID: 1690961630}
 --- !u!1001 &397755726
 PrefabInstance:
@@ -2453,7 +2465,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 9
+  buttonType: 10
 --- !u!1 &536589455
 GameObject:
   m_ObjectHideFlags: 0
@@ -2508,7 +2520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd8a89135feb514683a94fd191b4dcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuCanvasType: 5
+  menuCanvasType: 6
   IntoxicationDropdown: {fileID: 1375397322}
   HeadInjuryDropdown: {fileID: 1701162094}
   PeriodsDropdown: {fileID: 41684822}
@@ -2703,7 +2715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb486dc2cc28e69458796856f3c3204d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuCanvasType: 4
+  menuCanvasType: 5
   BirthDayInputField: {fileID: 2075179568}
   BirthMonthInputField: {fileID: 328733425}
   BirthYearInputField: {fileID: 747966857}
@@ -3604,7 +3616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 3
+  buttonType: 4
 --- !u!1 &1018768828
 GameObject:
   m_ObjectHideFlags: 0
@@ -3819,7 +3831,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 12
+  buttonType: 13
 --- !u!1 &1108145921
 GameObject:
   m_ObjectHideFlags: 0
@@ -3870,7 +3882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 995edb40d140db9449decaa27de89739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuCanvasType: 2
+  menuCanvasType: 3
 --- !u!1001 &1165894496
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4054,7 +4066,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 1
+  buttonType: 2
+--- !u!114 &1218697508 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4956630925837715752, guid: 288fb1895023a1a41acc599daef32f4b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1934834126}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1258845112
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4219,7 +4243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 6
+  buttonType: 7
 --- !u!1001 &1297673024
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4384,6 +4408,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1346897219}
+  - component: {fileID: 1346897220}
   m_Layer: 5
   m_Name: OperatorLoginMenu
   m_TagString: Untagged
@@ -4414,6 +4439,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0.75, y: 0.5}
   m_SizeDelta: {x: 1.5, y: -1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1346897220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346897218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f138dc90f5c483a4b88e961d22a8692f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuCanvasType: 0
+  LoginInputField: {fileID: 1218697508}
+  PassInputField: {fileID: 74144217}
 --- !u!1001 &1375397320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4637,7 +4677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec8b219c1164464aad4e697fe8164a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuCanvasType: 6
+  menuCanvasType: 7
   NotificationText: {fileID: 2071627207}
 --- !u!1 &1455545207
 GameObject:
@@ -4921,6 +4961,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1649734505 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9096224747843664786, guid: 392164c9088c2c545a7848fc4793b467,
+    type: 3}
+  m_PrefabInstance: {fileID: 1866770589}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1649734509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649734505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonType: 0
 --- !u!1 &1674506622
 GameObject:
   m_ObjectHideFlags: 0
@@ -5019,7 +5078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 11
+  buttonType: 12
 --- !u!1 &1690961628 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9096224747843664786, guid: 392164c9088c2c545a7848fc4793b467,
@@ -5038,7 +5097,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 8
+  buttonType: 9
 --- !u!114 &1690961630 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7288632552351280372, guid: 392164c9088c2c545a7848fc4793b467,
@@ -5542,7 +5601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 10
+  buttonType: 11
 --- !u!1001 &1866770589
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5833,7 +5892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 7
+  buttonType: 8
 --- !u!1001 &1934834126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7220,7 +7279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d32b80dbebd9ac4e9abeafc648d76fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: 0
+  buttonType: 1
 --- !u!224 &7336279499594974431 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7856235878480663123, guid: 5c9cd85570931944783c41b85caccd14,

@@ -41,7 +41,7 @@ namespace Assets.Scripts.Menu
             Debug.Log("login length before filter : " + LoginInputField.text);
 
 
-            string login = new string(LoginInputField.text.Where(c => char.IsLetterOrDigit(c)).ToArray());
+            string login = new string(LoginInputField.text.Where(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)).ToArray());
             Debug.Log("login length after filter : " + login);
             return login;
         }

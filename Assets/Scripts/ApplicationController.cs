@@ -31,10 +31,16 @@ namespace Assets.Scripts
             applicationView = ApplicationView.GetInstance();
             Debug.Log("App controller Awake");
 
-            
             experimentManager = new ExperimentManager();
-            experimentManager.AllModules = dataManager.GetAllModules(); ;
-            Debug.Log("experimentManager.AllModules.Count = " + experimentManager.AllModules.Count);
+            experimentManager.AllModules = dataManager.GetAllModules();
+            if(experimentManager.AllModules == null)
+            {
+                Debug.Log("Ошибка в начальной загрузке информации про все модули");
+            }
+            else
+            {
+                Debug.Log("Информация про все модули успешно загружена");
+            }  
         }
 
         public void OnExperimentIdEnterStart()
@@ -45,30 +51,56 @@ namespace Assets.Scripts
 
         public void OnExperimentIdEnterSend()
         {
-            //todo
             ExperimentIdCanvasController experimentIdCanvasController = canvasManager.GetExperimentIdCanvasController();
 
             int experiment_id = experimentIdCanvasController.GetExperimentId(); ;
-            
+            Experiment experiment = dataManager.GetExperimentById(experiment_id);
 
-            if (experiment_id == 0)
+            switch (experiment.ExperimentId)
             {
-                //applicationView.ShowNotificationMessage("Неудалось распарсить Id эксперимента");
-                //applicationView.OpenScreen(ScreenType.ExperimentIdEnteringMenu);
+                case -1:
+                    applicationView.ShowNotificationMessage("Ошибки в соединении с сервером. Обращайтесь к администратору системы.");
+                    applicationView.OpenScreen(ScreenType.MainMenu);
+                    break;
+                case -2:
+                    applicationView.ShowNotificationMessage("Отсутствуют права доступа для получения информации про эксперимент.");
+                    applicationView.OpenScreen(ScreenType.MainMenu);
+                    break;
+                case -3:
+                    applicationView.ShowNotificationMessage("Отсутствует эксперимент с таким id. Проверьте правильность введенного id.");
+                    break;
+                case -4:
+                    applicationView.ShowNotificationMessage("Ошибка на стороне сервера при попытке получить информацию об эксперименте. Обращайтесь к администратору.");
+                    applicationView.OpenScreen(ScreenType.MainMenu);
+                    break;
+                default:
+                    experimentManager.experiment = experiment;
+
+                    //todo проверка наличия всех исполняемых файлов
+                    List<string> missingExecs = experimentManager.GetMissingExecs();
+                    if (missingExecs.Count != 0)
+                    {
+                        string notification_str = "Успешно получена информация про эксперимент с id = " + experiment.ExperimentId +
+                            ". Отсутствуют явлыки следующих исполняемых файлов: \n";
+                        foreach(string str in missingExecs)
+                        {
+                            notification_str += str + "\n";
+                        }
+                        notification_str += "Перед запуском эксперимента добавьте недостающие ярлыки в папку " + experimentManager.base_module_path;
+                        applicationView.ShowNotificationMessage(notification_str);
+                    }
+                    else
+                    {
+                        applicationView.ShowNotificationMessage("Успешно получена информация про эксперимент с id = " + experiment.ExperimentId + 
+                            ". Исполняемые файлы всех модулей присутствуют");
+                        applicationView.OpenScreen(ScreenType.MainMenu);
+                    }
+
+                    
+                    break;
             }
-            else
-            {
-                Experiment experiment = dataManager.GetExperimentById(experiment_id);
 
-                //todo Проверка на то, что вернулось нормально(что нашло эксперимент)
 
-                experimentManager.experiment = experiment;
-
-                Debug.Log(experiment.ToString());
-                applicationView.OpenScreen(ScreenType.MainMenu);
-            }
-
-            
         }
 
         public void StartFirstParticipantIdentification()
@@ -99,27 +131,31 @@ namespace Assets.Scripts
             ParticipantRegistrationRequest registrationInfo = registrationCanvasController.GetRegistrationInfo();
             Participant res = dataManager.Register(registrationInfo);
 
-            if (res != null)
+            switch (res.ParticipantId)
             {
-                //todo проверка пола, и если M, то выключать поле Period
-                if (!res.IsFemale())
-                    canvasManager.GetParticipantInExperimentCanvasController().HidePeriod();
-                else
-                    canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
+                case -1:
+                    applicationView.ShowNotificationMessage("Неудачная попытка регистрации испытуемого. Отсутствует соединение с сервером. Обращайтесь к администратору системы.");
+                    break;
+                case -2:
+                    applicationView.ShowNotificationMessage("Неудачная попытка регистрации испытуемого. Недостаточно прав. Обращайтесь к администратору системы.");
+                    break;
+                case -3:
+                case -4:
+                    applicationView.ShowNotificationMessage("Неудачная попытка регистрации испытуемого. Внутренняя ошибка сервера. Обращайтесь к администратору системы.");
+                    break;
+                default:
+                    if (!res.IsFemale())
+                        canvasManager.GetParticipantInExperimentCanvasController().HidePeriod();
+                    else
+                        canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
 
-
-                applicationView.ShowNotificationMessage("Ваш ID : " + res.ParticipantId + ". Запишите его, чтобы, при повторной работе с системой, авторизоваться с его помощью.");
-                experimentManager.SetParticipantId(curr_identifying_participant, res.ParticipantId);
-                applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+                    canvasManager.GetParticipantInExperimentCanvasController().SetParticipantId(res.ParticipantId);
+                    applicationView.ShowNotificationMessage("Ваш ID : " + res.ParticipantId + ". Запишите его, чтобы, при повторной работе с системой, авторизоваться с его помощью.");
+                    experimentManager.SetParticipantId(curr_identifying_participant, res.ParticipantId);
+                    applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+                    break;
             }
-            else
-            {
-                applicationView.ShowNotificationMessage("Неудачная попытка регистрации. Не удалось соединиться с сервером");
-            }
-            //todo сделать нотификейшн с выданным id, чтобы чел точно его записал где-нибудь
-            //todo Добавить в эксперимент манагер инфу про партисипанта
-
-            
+        
         }
 
         public void OnAuthorisationSend()
@@ -128,25 +164,43 @@ namespace Assets.Scripts
             int part_id = authorisationCanvasController.GetAuthorisationId();
 
             Participant res = dataManager.Login(part_id);
+
             switch (res.ParticipantId)
             {
                 case -1:
-                    applicationView.ShowNotificationMessage("Ошибка в авторизации по данному Id. " +
-                        "Попробуете проверить правильность ввода, или зарегистрируйтесь");
-                    applicationView.OpenScreen(ScreenType.MainMenu);
-                    break;
-
-                case 0:
-                    applicationView.ShowNotificationMessage("Внутренние проблемы в работе сервера. " +
+                    applicationView.ShowNotificationMessage("Ошибки в соединении с сервером. Обращайтесь к администратору системы." +
                         "Подтвердить существование пользователя с данным Id не получилось. Дальнейшая работа предполагает, что id было введено верно.");
+                    applicationView.OpenScreen(ScreenType.MainMenu);
                     experimentManager.SetParticipantId(curr_identifying_participant, part_id);
                     canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
+                    canvasManager.GetParticipantInExperimentCanvasController().SetParticipantId(part_id);
                     applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
                     break;
-
+                case -2:
+                    applicationView.ShowNotificationMessage("Отсутствуют права доступа для выполнения операции. Обращайтесь к администратору." +
+                        "Подтвердить существование пользователя с данным Id не получилось. Дальнейшая работа предполагает, что id было введено верно.");
+                    applicationView.OpenScreen(ScreenType.MainMenu);
+                    experimentManager.SetParticipantId(curr_identifying_participant, part_id);
+                    canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
+                    canvasManager.GetParticipantInExperimentCanvasController().SetParticipantId(part_id);
+                    applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+                    break;
+                case -3:
+                    applicationView.ShowNotificationMessage("Отсутствует испытуемый с таким id. Проверьте правильность введенного id, либо зарегистрируйте нового испытуемого.");
+                    applicationView.OpenScreen(ScreenType.ParticipantIdentificationTypeChoiceMenu);
+                    break;
+                case -4:
+                    applicationView.ShowNotificationMessage("Ошибка на стороне сервера при попытке получить информацию про испытуемого. " +
+                        "Подтвердить существование пользователя с данным Id не получилось. Дальнейшая работа предполагает, что id было введено верно.");
+                    applicationView.OpenScreen(ScreenType.MainMenu);
+                    experimentManager.SetParticipantId(curr_identifying_participant, part_id);
+                    canvasManager.GetParticipantInExperimentCanvasController().ShowPeriod();
+                    canvasManager.GetParticipantInExperimentCanvasController().SetParticipantId(part_id);
+                    applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
+                    break;
                 default:
                     experimentManager.SetParticipantId(curr_identifying_participant, res.ParticipantId);
-
+                    canvasManager.GetParticipantInExperimentCanvasController().SetParticipantId(res.ParticipantId);
                     if (!res.IsFemale())
                         canvasManager.GetParticipantInExperimentCanvasController().HidePeriod();
                     else
@@ -154,30 +208,6 @@ namespace Assets.Scripts
                     applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
                     break;
             }
-
-            
-            /*
-
-            if (res.ParticipantId != -1)
-            {
-                //todo проверка пола, и если M, то выключать поле Period
-                
-
-                //todo
-            }
-            else
-            {   if(res.ParticipantId == -1)
-                {
-                    applicationView.ShowNotificationMessage("Ошибка в авторизации по данному Id. Попробуете проверить правильность ввода, или зарегистрируйтесь");
-                }
-                else
-                {
-                    applicationView.ShowNotificationMessage("Проблемы при авторизации(не связаны именно с этим id)");
-                }
-            }
-            */
-            //todo Добавить в эксперимент манагер инфу про партисипанта
-
         }
         
         public void OnParticipantInExperimentSend()
@@ -223,21 +253,22 @@ namespace Assets.Scripts
 
         public void FinishExperiment()
         {
-            //todo отправка данных, + чтобы в нотификации говорилось о том, куда данные сохранены(локально, или на сервачок)
             Experiment experiment = experimentManager.GetFinalExperimentInfo();
 
             int res = dataManager.SendExperimentUpdate(experiment);
-            if (res == 0)
+            switch (res)
             {
-                applicationView.ShowNotificationMessage("Эксперимент завершен. Данные успешно загружены на сервер.");
-            }
-            else
-            {
-                applicationView.ShowNotificationMessage("Эксперимент завершен. Ошибка в связи с сервером, данные на сервер не загружены. " +
+                case 0:
+                    applicationView.ShowNotificationMessage("Эксперимент завершен. Данные успешно загружены на сервер.");
+                    break;
+                default:
+                    applicationView.ShowNotificationMessage("Эксперимент завершен. Ошибка в связи с сервером, данные на сервер не загружены. " +
                     "Повторная попытка загрузки будет при следующем включении приложения.");
+                    //todo локальное сохранение
+                    break;
             }
-            
             applicationView.OpenScreen(ScreenType.MainMenu);
+
         }
 
 
@@ -251,10 +282,25 @@ namespace Assets.Scripts
             OperatorLoginCanvasController operatorLoginCanvasController = canvasManager.GetOperatorLoginCanvasController();
             OperatorLoginRequest operatorLoginRequest = operatorLoginCanvasController.GetOperatorLoginRequest();
 
+            int res = dataManager.SendLogin(operatorLoginRequest);
+            switch (res)
+            {
+                case 0:
+                    applicationView.ShowNotificationMessage("Авторизация успешна.");
+                    applicationView.OpenScreen(ScreenType.MainMenu);
+                    break;
+                case -1:
+                    applicationView.ShowNotificationMessage("Неудачная попытка авторизации. Ошибки в соединении с сервером. Обращайтесь к администратору системы.");
+                    break;
+                case -2:
+                    applicationView.ShowNotificationMessage("Неудачная попытка авторизации. Неверные логин или пароль");
+                    break;
+                default:
+                    applicationView.ShowNotificationMessage("Неудачная попытка авторизации. Ошибка на стороне сервера. Обращайтесь к администратору.");
+                    break;
+            }
 
-            dataManager.SendLogin(operatorLoginRequest);
-
-            applicationView.OpenScreen(ScreenType.MainMenu);
+            //applicationView.OpenScreen(ScreenType.MainMenu);
         }
 
 

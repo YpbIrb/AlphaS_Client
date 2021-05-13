@@ -34,6 +34,11 @@ namespace Assets.Scripts.Model
         public DateTime FinishTime { get; set; }
 
         
+        public Experiment(int id)
+        {
+            ExperimentId = id;
+        }
+
         public override string ToString()
         {
             string res = base.ToString();

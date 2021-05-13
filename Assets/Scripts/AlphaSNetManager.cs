@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -83,175 +84,132 @@ namespace Assets.Scripts
             }
         }
 
-        public Participant SendRegistrationRequestAsync(string registrationRequest)
+        public HttpResponseMessage SendRegistrationRequestAsync(string registrationRequest)
         {
             UnityEngine.Debug.Log("Sending registration request. Url : " + base_url + participant_creation_url);
             StringContent content = new StringContent(registrationRequest, Encoding.UTF8, "application/json");
-            using (HttpResponseMessage response = client.PostAsync(base_url + participant_creation_url, content).Result)
+            try
             {
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseBody = response.Content.ReadAsStringAsync().Result;
-                    UnityEngine.Debug.Log("Get Participant from server (after registration): \n" + responseBody);
-                    var jpart = JObject.Parse(responseBody);
-                    Participant part = jpart.ToObject<Participant>();
-                    return part;
-                }
-
-                else
-                {
-                    UnityEngine.Debug.Log("Unseccessfull http registration request. StatusCode : " + response.StatusCode);
-                    return null;
-                }
-            };
+                HttpResponseMessage response = client.PostAsync(base_url + participant_creation_url, content).Result;
+                return response;
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.Log(e.Message);
+                return null;
+            }
         }
 
-        public Module GetModuleRequest(string moduleName)
+        public HttpResponseMessage GetModuleRequest(string moduleName)
         {
-            //StringContent content = new StringContent(ModuleRequest, Encoding.UTF8, "application/json");
             UnityEngine.Debug.Log("Sending GetModule request, Url : " + base_url + module_get_url + moduleName);
-            HttpResponseMessage response = client.GetAsync(base_url + module_get_url + moduleName).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                string responseBody = response.Content.ReadAsStringAsync().Result;
-                UnityEngine.Debug.Log("Module : responseBody" + responseBody);
-                var jpart = JObject.Parse(responseBody);
-                Module module = jpart.ToObject<Module>();
-                return module;
-            }
-            else
-            {
-                UnityEngine.Debug.Log("Unseccessfull http GetModule request. StatusCode : " + response.StatusCode);
-                return null;
-            }
             
+            try
+            {
+                HttpResponseMessage response = client.GetAsync(base_url + module_get_url + moduleName).Result;
+                return response;
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.Log(e.Message);
+                return null;
+            }
         }
 
-        public List<Module> GetAllModulesRequest()
+        public HttpResponseMessage GetAllModulesRequest()
         {
-            //todo
             UnityEngine.Debug.Log("Sending GetAllModulesRequest request");
-            //StringContent content = new StringContent(ModuleRequest, Encoding.UTF8, "application/json");
             UnityEngine.Debug.Log("Sending GetAllModulesRequest request, Url : " + base_url + allModules_get_url);
-            HttpResponseMessage response = client.GetAsync(base_url + allModules_get_url).Result;
-            if (response.IsSuccessStatusCode)
+            try
             {
-                string responseBody = response.Content.ReadAsStringAsync().Result;
-                UnityEngine.Debug.Log("AllModules : responseBody " + responseBody);
-                var jpart = JArray.Parse(responseBody);
-                List<Module> module = jpart.ToObject<List<Module>>();
-                return module;
+                HttpResponseMessage response = client.GetAsync(base_url + allModules_get_url).Result;
+                return response;
             }
-            else
+            catch (Exception e)
             {
-                UnityEngine.Debug.Log("Unseccessfull http GetAllModulesRequest request. StatusCode : " + response.StatusCode);
+                UnityEngine.Debug.Log(e.Message);
                 return null;
             }
-
         }
 
-        public Experiment GetExperimentRequest(int id)
+        public HttpResponseMessage GetExperimentRequest(int id)
         {
-            //todo
             UnityEngine.Debug.Log("Sending GetExperiment request, Url : " + base_url + experiment_get_url + id);
-            //StringContent content = new StringContent(ModuleRequest, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = client.GetAsync(base_url + experiment_get_url + id).Result;
-            if (response.IsSuccessStatusCode)
+            try
             {
-                string responseBody = response.Content.ReadAsStringAsync().Result;
-                var jpart = JObject.Parse(responseBody);
-                UnityEngine.Debug.Log("Get Experiment from server: \n" + responseBody);
-                Experiment exp = jpart.ToObject<Experiment>();
-                return exp;
+                HttpResponseMessage response = client.GetAsync(base_url + experiment_get_url + id).Result;
+                return response;
             }
-
-            else
+            catch (Exception e)
             {
-                UnityEngine.Debug.Log("Unseccessfull http GetExperiment request. StatusCode : " + response.StatusCode);
+                UnityEngine.Debug.Log(e.Message);
                 return null;
             }
         }
 
-        public Participant GetParticipantRequest(int id)
+        public HttpResponseMessage GetParticipantRequest(int id)
         {
             UnityEngine.Debug.Log("Sending GetParticipant request, Url : " + base_url + participant_get_url + id);
-            //StringContent content = new StringContent(ModuleRequest, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = client.GetAsync(base_url + participant_get_url + id).Result;
-            if (response.IsSuccessStatusCode)
+            try
             {
-                string responseBody = response.Content.ReadAsStringAsync().Result;
-                var jpart = JObject.Parse(responseBody);
-                UnityEngine.Debug.Log("Get Participant from server: \n" + responseBody);
-                Participant part = jpart.ToObject<Participant>();
-                return part;
+                HttpResponseMessage response = client.GetAsync(base_url + participant_get_url + id).Result;
+                return response;
             }
-
-            else
+            catch (Exception e)
             {
-                UnityEngine.Debug.Log("Unseccessfull http GetParticipant request. StatusCode : " + response.StatusCode);
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    return new Participant(-1);
-                }
-                else
-                {
-                    
-                    return new Participant(0); ;
-                }
-                
+                UnityEngine.Debug.Log(e.Message);
+                return null;
             }
         }
 
-        public int SendExperimentUpdateRequest(int id, string registrationRequest)
+        public HttpResponseMessage SendExperimentUpdateRequest(int id, string registrationRequest)
         {
             UnityEngine.Debug.Log("Sending ExperimentUpdate request, Url : " + base_url + experiment_update_url + id);
-            //StringContent content = new StringContent(ModuleRequest, Encoding.UTF8, "application/json");
-
             StringContent content = new StringContent(registrationRequest, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = client.PostAsync(base_url + experiment_update_url + id, content).Result;
-            if (response.IsSuccessStatusCode)
+
+            try
             {
-                return 0;
+                HttpResponseMessage response = client.PostAsync(base_url + experiment_update_url + id, content).Result;
+                return response;
             }
-
-            else
+            catch (Exception e)
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    Participant part = new Participant((-1));
-                }
-
-                UnityEngine.Debug.Log("Unseccessfull http GetParticipant request. StatusCode : " + response.StatusCode);
-                return -1;
+                UnityEngine.Debug.Log(e.Message);
+                return null;
             }
         }
 
-        public int SendOperatorLoginRequest(string loginRequest)
+        public HttpResponseMessage SendOperatorLoginRequest(string loginRequest)
         {
             UnityEngine.Debug.Log("Sending OperatorLogin request, Url : " + base_url + operator_login_url);
             //StringContent content = new StringContent(ModuleRequest, Encoding.UTF8, "application/json");
 
             StringContent content = new StringContent(loginRequest, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = client.PostAsync(base_url + operator_login_url, content).Result;
-            if (response.IsSuccessStatusCode)
+            try
             {
+                HttpResponseMessage response = client.PostAsync(base_url + operator_login_url, content).Result;
 
-                string responseBody = response.Content.ReadAsStringAsync().Result;
-                UnityEngine.Debug.Log("Login : responseBody" + responseBody);
-                var jpart = JObject.Parse(responseBody);
-                JToken jToken = jpart.GetValue("token");
-                string token = jToken.ToString();
-                UnityEngine.Debug.Log("token string : " + token);
+                if (response.IsSuccessStatusCode)
+                {
 
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                    string responseBody = response.Content.ReadAsStringAsync().Result;
+                    UnityEngine.Debug.Log("Login : responseBody" + responseBody);
+                    var jpart = JObject.Parse(responseBody);
+                    JToken jToken = jpart.GetValue("token");
+                    string token = jToken.ToString();
+                    UnityEngine.Debug.Log("token string : " + token);
 
-                return 0;
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                }
+
+                return response;
             }
-            else
+            catch (Exception e)
             {
-                UnityEngine.Debug.Log("Unseccessfull http OperatorLogin request. StatusCode : " + response.StatusCode);
-                return -1;
+                UnityEngine.Debug.Log(e.Message);
+                return null;
             }
+            
 
         }
         

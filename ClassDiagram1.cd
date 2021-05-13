@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
+  <Class Name="Assets.Scripts.ApplicationController" Collapsed="true">
+    <Position X="15.75" Y="7.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAACCAAAAAAQAACAwEAAgAIAAgIAAIACCAAmA=</HashCode>
+      <FileName>Assets\Scripts\ApplicationController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="dataManager" />
+      <Field Name="canvasManager" />
+      <Field Name="applicationView" />
+      <Field Name="experimentManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.MenuCanvasManager" Collapsed="true">
+    <Position X="15.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQCABBAAAIAAAAQAAhAAAAQCAASAAAAEQAAAEIAAAEg=</HashCode>
+      <FileName>Assets\Scripts\Menu\MenuCanvasManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="canvasControllerList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Assets.Scripts.ApplicationView" Collapsed="true">
+    <Position X="15.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAACAAAAAIAEAAAAAAACAAAAhAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\ApplicationView.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="menuCanvasManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Assets.Scripts.DataManager" Collapsed="true">
+    <Position X="15.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAADAAAAAAAACBAAAAAAAYAAAAAMA=</HashCode>
+      <FileName>Assets\Scripts\DataManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="netManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Assets.Scripts.ExperimentManager" Collapsed="true">
+    <Position X="19.5" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAICACIQAAAAAhABkAwBQAAAIAAAAEAAACIACAA=</HashCode>
+      <FileName>Assets\Scripts\ExperimentManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="namedPipeResultsGetter" />
+      <Property Name="experiment" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Assets.Scripts.Singleton&lt;T&gt;" Collapsed="true">
+    <Position X="13.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAgAAAAABABAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Singleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.ButtonController" Collapsed="true">
+    <Position X="16.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAEBACAAAAAAAAAAgAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Menu\ButtonController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="applicationController" />
+      <Field Name="menuButton" />
+      <Field Name="buttonType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="UnityEngine.UI.Button" Collapsed="true">
+    <Position X="19" Y="6.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="UnityEngine.UI.Button.ButtonClickedEvent" Collapsed="true">
+        <TypeIdentifier />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier />
+    <Lollipop Orientation="Bottom" Position="0.11" Collapsed="true" />
+  </Class>
+  <Class Name="Assets.Scripts.AlphaSNetManager" Collapsed="true">
+    <Position X="15.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAICAIAAEAAAAIAAAAAAiAAgAADgACAAAAJCQIAUA=</HashCode>
+      <FileName>Assets\Scripts\AlphaSNetManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.Experiment" Collapsed="true">
+    <Position X="19" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgABACAAAAAAAEAAAAAAAQIAAAAAAAAIAAEAAQAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Experiment.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="FirstParticipant" />
+      <Property Name="SecondParticipant" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Modules" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.CanvasController">
+    <Position X="13.25" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Menu\CanvasControllers\CanvasController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="menuCanvasType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Assets.Scripts.NamedPipeResultsGetter" Collapsed="true">
+    <Position X="18.5" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAEAAAIAAAAAAAAAAgCAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ExperimentManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.ExperimentIdCanvasController" Collapsed="true">
+    <Position X="12.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAACAAAAAAAAAAQAAAAAAAAAAAEAEQ=</HashCode>
+      <FileName>Assets\Scripts\Menu\CanvasControllers\ExperimentIdCanvasController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.ExperimentProcessCanvasController" Collapsed="true">
+    <Position X="16.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAABBAAAAAAAAIAQAAAAAAEAAAABQAAAIARIEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\CanvasControllers\ExperimentProcessCanvasController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.MainMenuCanvasController" Collapsed="true">
+    <Position X="12.5" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\CanvasControllers\MainMenuCanvasController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.NotificationCanvasController" Collapsed="true">
+    <Position X="14.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\CanvasControllers\NotificationCanvasController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.OperatorLoginCanvasController" Collapsed="true">
+    <Position X="14.5" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAACAAAAAAIAAAAAAAAABAAAAAAAAgAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\CanvasControllers\OperatorLoginCanvasController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.ParticipantAuthorisationCanvasController" Collapsed="true">
+    <Position X="14.25" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAACAAACAAAAAAQAAAAAAAAAAAEAEQ=</HashCode>
+      <FileName>Assets\Scripts\Menu\CanvasControllers\ParticipantAuthorisationCanvasController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.ParticipantIdentificationTypeCanvasController" Collapsed="true">
+    <Position X="16.25" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\CanvasControllers\ParticipantIdentificationTypeCanvasController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.ParticipantInExperimentCanvasController" Collapsed="true">
+    <Position X="16.5" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAoAgBAAAAAAACAAACAAAAIAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\CanvasControllers\ParticipantInExperimentCanvasController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Menu.ParticipantRegistrationCanvasController" Collapsed="true">
+    <Position X="12.5" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAgAAAAgAAAAAVAAAAAAAAEAAAACAAAUABAAAAAAEQ=</HashCode>
+      <FileName>Assets\Scripts\Menu\CanvasControllers\ParticipantRegistrationCanvasController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.ParticipantInExperiment" Collapsed="true">
+    <Position X="19" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAABAAAAAAAAAAEAAAABAAAAAAAAAAEAIAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\ParticipantInExperiment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.ModuleInExperiment" Collapsed="true">
+    <Position X="19" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAACAAAAAAAEAAAAAAAAIAAECAACAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\ModuleInExperiment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Assets.Scripts.Menu.ButtonType" Collapsed="true">
+    <Position X="16.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAQCAAAAgAAAABAAACEAADAAAAAAAAAAAAEUAAAE=</HashCode>
+      <FileName>Assets\Scripts\Menu\ButtonController.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Assets.Scripts.Menu.MenuCanvasType" Collapsed="true">
+    <Position X="12.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAgAAIAQIAQAAAAAAAAAAwAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Menu\MenuCanvasManager.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -2302,7 +2302,7 @@ PrefabInstance:
     - target: {fileID: 7625647722641264405, guid: b78bf0927ec33d04b89c7efef74f7a49,
         type: 3}
       propertyPath: m_text
-      value: Participant in experiment
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7625647722641264407, guid: b78bf0927ec33d04b89c7efef74f7a49,
         type: 3}
@@ -2526,6 +2526,7 @@ MonoBehaviour:
   PeriodsDropdown: {fileID: 41684822}
   PeriodsDropdownWithHeader: {fileID: 2139610819}
   AdditionalInformationInputField: {fileID: 101693340}
+  Header: {fileID: 988274775}
 --- !u!1 &566745820
 GameObject:
   m_ObjectHideFlags: 0
@@ -3443,6 +3444,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 963701727}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &988274775 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7625647722641264405, guid: b78bf0927ec33d04b89c7efef74f7a49,
+    type: 3}
+  m_PrefabInstance: {fileID: 492150802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &997610111
 PrefabInstance:
   m_ObjectHideFlags: 0

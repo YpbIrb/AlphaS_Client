@@ -28,6 +28,9 @@ namespace Assets.Scripts.Menu
         [SerializeField]
         TMP_InputField AdditionalInformationInputField;
 
+        [SerializeField]
+        TMP_Text Header;
+
         protected void Awake()
         {
             Debug.Log("In Awake in IdentificationTypeCanvasController");
@@ -61,6 +64,12 @@ namespace Assets.Scripts.Menu
         public void ShowPeriod()
         {
             PeriodsDropdownWithHeader.SetActive(true);
+        }
+
+        public void SetParticipantId(int id)
+        {
+
+            Header.text = "Испытуемый с id = " + id;
         }
 
 

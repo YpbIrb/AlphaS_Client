@@ -32,6 +32,10 @@ namespace Assets.Scripts.Model
         [JsonProperty("Path_To_Exe")]
         public string PathToExe { get; set; }
 
+        public Module(int moduleId)
+        {
+            ModuleId = moduleId;
+        }
     }
 
 }

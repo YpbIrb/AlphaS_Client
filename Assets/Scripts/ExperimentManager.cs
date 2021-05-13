@@ -14,6 +14,7 @@ namespace Assets.Scripts
 
     public class ExperimentManager
     {
+        public string base_module_path = "C:\\AlphaS\\Modules\\";
         public List<Module> AllModules { get; set; }
         public Experiment experiment { get; set; }
         ApplicationController applicationController;
@@ -103,8 +104,6 @@ namespace Assets.Scripts
 
         private void ExecuteModule(ModuleInExperiment moduleInExperiment)
         {
-            //Сначала запустить экзе с нужными параметрами, а потом добавить слушателя на пипу
-            //После получения инфу из пипы, запихиваем её в соответствующий ModuleInExperiment
 
             var resultsTask = namedPipeResultsGetter.GetModuleResults(moduleInExperiment.ModuleName);
 
@@ -114,7 +113,7 @@ namespace Assets.Scripts
 
             System.Diagnostics.Process myProcess = new System.Diagnostics.Process();
             Module module = GetModuleByName(moduleInExperiment.ModuleName);
-            myProcess.StartInfo.FileName = "F:\\Modules\\" +module.PathToExe + ".exe.lnk";
+            myProcess.StartInfo.FileName = base_module_path +module.PathToExe + ".exe.lnk";
             myProcess.StartInfo.CreateNoWindow = false;
             myProcess.StartInfo.UseShellExecute = true;
             myProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
@@ -122,7 +121,8 @@ namespace Assets.Scripts
             {
                 myProcess.StartInfo.Arguments += pair.Key + "=" + pair.Value+" ";
             }
-            Debug.Log(moduleInExperiment.ModuleName + " module Arguments : " + myProcess.StartInfo.Arguments);
+            myProcess.StartInfo.Arguments += "first_part" + "=" + experiment.FirstParticipant.ParticipantId + " ";
+            myProcess.StartInfo.Arguments += "second_part" + "=" + experiment.SecondParticipant.ParticipantId + " ";
 
             try
             {
@@ -131,10 +131,8 @@ namespace Assets.Scripts
                 experimentProcessCanvasController.SetCurrentModuleCondition("Started");
                 myProcess.WaitForExit();
                 moduleInExperiment.FinishTime = DateTime.Now;
-                //!!!!!!!!!!
                 Dictionary<string, string> module_res = new Dictionary<string, string>(namedPipeResultsGetter.results);
                 moduleInExperiment.OutputValues = module_res;
-                //namedPipeResultsGetter.ClearResults();
                 experimentProcessCanvasController.SetCurrentModuleCondition("Finished");
             }
             catch (Exception e)
@@ -167,6 +165,9 @@ namespace Assets.Scripts
                 {
                     Debug.Log("No module with name " + moduleName + " in AllModule list. Getting module " + moduleName + " from dataManager");
                     res = dataManager.GetModuleByName(moduleName);
+
+                    AllModules.Add(res);
+                    //todo чек на то, что модуль нашелся нормально(по факту, может не найтись, только если сервер накрылся)
                 }
                 else
                 {
@@ -231,6 +232,22 @@ namespace Assets.Scripts
                 experiment.SecondParticipant = secondParticipant;
 
             return experiment;
+        }
+
+        public List<string> GetMissingExecs()
+        {
+            List<string> res = new List<string>();
+            foreach(ModuleInExperiment moduleInExperiment in experiment.Modules)
+            {
+                string path;
+                Module module = GetModuleByName(moduleInExperiment.ModuleName);
+                path = base_module_path + module.PathToExe + ".exe.lnk";
+                if (!File.Exists(path))
+                {
+                    res.Add(module.PathToExe);
+                }
+            }
+            return res;
         }
 
     }

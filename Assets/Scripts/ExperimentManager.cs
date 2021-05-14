@@ -14,7 +14,7 @@ namespace Assets.Scripts
 
     public class ExperimentManager
     {
-        public string base_module_path = "C:\\AlphaS\\Modules\\";
+        public const string base_module_path = "C:\\AlphaS\\Modules\\";
         public List<Module> AllModules { get; set; }
         public Experiment experiment { get; set; }
         ApplicationController applicationController;

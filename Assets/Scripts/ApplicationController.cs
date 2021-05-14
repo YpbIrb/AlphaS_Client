@@ -86,7 +86,7 @@ namespace Assets.Scripts
                         {
                             notification_str += str + "\n";
                         }
-                        notification_str += "Перед запуском эксперимента добавьте недостающие ярлыки в папку " + experimentManager.base_module_path;
+                        notification_str += "Перед запуском эксперимента добавьте недостающие ярлыки в папку " + ExperimentManager.base_module_path;
                         applicationView.ShowNotificationMessage(notification_str);
                     }
                     else
@@ -264,6 +264,7 @@ namespace Assets.Scripts
                 default:
                     applicationView.ShowNotificationMessage("Эксперимент завершен. Ошибка в связи с сервером, данные на сервер не загружены. " +
                     "Повторная попытка загрузки будет при следующем включении приложения.");
+                    dataManager.SaveExperimentLocally(experiment);
                     //todo локальное сохранение
                     break;
             }
@@ -287,6 +288,7 @@ namespace Assets.Scripts
             {
                 case 0:
                     applicationView.ShowNotificationMessage("Авторизация успешна.");
+                    dataManager.UploadLocalExperimentFiles();
                     applicationView.OpenScreen(ScreenType.MainMenu);
                     break;
                 case -1:

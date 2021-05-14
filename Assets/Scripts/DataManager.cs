@@ -4,9 +4,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Sockets;
+using System.Text;
 using UnityEngine;
 
 
@@ -18,7 +20,7 @@ namespace Assets.Scripts
     {
 
         AlphaSNetManager netManager;
-
+        public const string experiments_path = "C:\\AlphaS\\Experiments\\";
 
         protected override void Awake()
         {
@@ -205,8 +207,8 @@ namespace Assets.Scripts
             {
                 string responseBody = response.Content.ReadAsStringAsync().Result;
                 UnityEngine.Debug.Log("Module : responseBody" + responseBody);
-                var jpart = JObject.Parse(responseBody);
-                Module module = jpart.ToObject<Module>();
+                var jmodule = JObject.Parse(responseBody);
+                Module module = jmodule.ToObject<Module>();
                 return module;
             }
             else
@@ -243,6 +245,7 @@ namespace Assets.Scripts
             string experiment_json = JsonConvert.SerializeObject(experiment);
             Debug.Log(experiment_json);
             HttpResponseMessage response = netManager.SendExperimentUpdateRequest(id, experiment_json);
+
             if (response == null)
             {
                 UnityEngine.Debug.Log("Unseccessfull http SendExpetimentUpdate request. Troubles with connection");
@@ -311,5 +314,71 @@ namespace Assets.Scripts
                 }
             }
         }
+
+        public int SaveExperimentLocally(Experiment experiment)
+        {
+            Debug.Log("Saving experiment info locally");
+            string file_path = experiments_path + experiment.StartTime.ToString(@"dd.mm.yyyy-HH/mm") + ".txt";
+            FileStream fs = File.Create(file_path);
+            string experiment_json = JsonConvert.SerializeObject(experiment);
+            byte[] info = new UTF8Encoding(true).GetBytes(experiment_json);
+            fs.Write(info, 0, info.Length);
+            fs.Close();
+            return 0;
+        }
+
+        public int UploadLocalExperimentFiles() 
+        {
+            List<string> filePaths = Directory.GetFiles(experiments_path).ToList();
+            int error = 0;
+            foreach(string path in filePaths)
+            {
+                StreamReader sr = File.OpenText(path);
+                string experiment_json = "";
+                string tmp = "";
+                while ((tmp = sr.ReadLine()) != null)
+                {
+                    experiment_json += tmp;
+                }
+                sr.Close();
+                try
+                {
+                    var jexp = JObject.Parse(experiment_json);
+                    Experiment exp = jexp.ToObject<Experiment>();
+
+                    HttpResponseMessage response = netManager.SendExperimentUpdateRequest(exp.ExperimentId, experiment_json);
+
+                    if (response != null)
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            Debug.Log("Successfully uploaded experiment with id = " + exp.ExperimentId);
+                            File.Delete(path);
+                        }
+                        else
+                        {
+                            Debug.Log("Error while uploading experiment with id = " + exp.ExperimentId);
+                            Debug.Log("Responce code : " + response.StatusCode);
+                            error = -1;
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Can't connect to server to upload experiment file ");
+                        error = -1;
+                    }
+                }
+                catch (JsonReaderException e)
+                {
+                    Debug.Log("Exception while parsing experiment file " + path );
+                    Debug.Log(e.Message);
+                    error = -1;
+                }
+            }
+
+
+            return error;
+        }
+
     }
 }

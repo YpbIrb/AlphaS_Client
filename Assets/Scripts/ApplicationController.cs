@@ -40,14 +40,15 @@ namespace Assets.Scripts
 
 
             appSettings = GetSettings(SettingsFilePath);
-            dataManager.SetAlphaSWebIp(appSettings.AlphaS_Web_Ip);
+            
 
-            Debug.Log("AlphaS_Web_Ip = " + appSettings.AlphaS_Web_Ip);
-            if (appSettings.AlphaS_Web_Ip == "-1")
+            
+            if (appSettings == null)
             {
-                applicationView.ShowNotificationMessage("Ошибки в распозновании файла настроек. Проверьти наличие файла настроек по адресу " + Path.GetFullPath(SettingsFilePath));
+                applicationView.ShowNotificationMessage("Ошибки в распозновании файла настроек. Проверьти наличие файла настроек по адресу " + Path.GetFullPath(SettingsFilePath) + ". Перезапустите программу при наличии файла настроек для корректной работы приложения.");
             }
-
+            Debug.Log("AlphaS_Web_Ip = " + appSettings.AlphaS_Web_Ip);
+            dataManager.SetAlphaSWebIp(appSettings.AlphaS_Web_Ip);
             experimentManager = new ExperimentManager();
             experimentManager.AllModules = dataManager.GetAllModules();
             if (experimentManager.AllModules == null)
@@ -62,18 +63,19 @@ namespace Assets.Scripts
 
         private AppSettings GetSettings(string setting_file_path)
         {
-            StreamReader sr = File.OpenText(setting_file_path);
-            string settings_json = "";
-            string tmp = "";
-
-            while ((tmp = sr.ReadLine()) != null)
-            {
-                settings_json += tmp;
-            }
-            sr.Close();
-            Debug.Log(settings_json);
+            
             try
             {
+                StreamReader sr = File.OpenText(setting_file_path);
+                string settings_json = "";
+                string tmp = "";
+
+                while ((tmp = sr.ReadLine()) != null)
+                {
+                    settings_json += tmp;
+                }
+                sr.Close();
+                Debug.Log(settings_json);
                 var jset = JObject.Parse(settings_json);
                 Debug.Log(jset.ToString());
                 AppSettings settings = jset.ToObject<AppSettings>();
@@ -81,7 +83,13 @@ namespace Assets.Scripts
             }
             catch (JsonReaderException e)
             {
-                Debug.Log("Exception while parsing experiment file " + setting_file_path);
+                Debug.Log("Exception while parsing settings file " + setting_file_path);
+                Debug.Log(e.Message);
+                return null;
+            }
+            catch (FileNotFoundException e)
+            {
+                Debug.Log("Exception while finding settings file " + setting_file_path);
                 Debug.Log(e.Message);
                 return null;
             }

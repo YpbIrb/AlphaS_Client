@@ -1,6 +1,7 @@
 ﻿
 using Assets.Scripts.Menu;
 using System.Collections;
+
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -8,13 +9,16 @@ using Assets.Scripts.Requests;
 using Assets.Scripts.Model;
 using System.Globalization;
 using System.Linq;
+using System.IO;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Assets.Scripts
 {
 
     public class ApplicationController : Singleton<ApplicationController>
     {
-
+        AppSettings appSettings;
         DataManager dataManager;
         MenuCanvasManager canvasManager;
         ApplicationView applicationView;
@@ -25,22 +29,62 @@ namespace Assets.Scripts
         protected override void Awake()
         {
             base.Awake();
+            Debug.Log("App controller Awake");
             curr_identifying_participant = 0;
             dataManager = DataManager.GetInstance();
+
             canvasManager = MenuCanvasManager.GetInstance();
             applicationView = ApplicationView.GetInstance();
-            Debug.Log("App controller Awake");
+            string SettingsFilePath = "settings.json";
+
+
+
+            appSettings = GetSettings(SettingsFilePath);
+            dataManager.SetAlphaSWebIp(appSettings.AlphaS_Web_Ip);
+
+            Debug.Log("AlphaS_Web_Ip = " + appSettings.AlphaS_Web_Ip);
+            if (appSettings.AlphaS_Web_Ip == "-1")
+            {
+                applicationView.ShowNotificationMessage("Ошибки в распозновании файла настроек. Проверьти наличие файла настроек по адресу " + Path.GetFullPath(SettingsFilePath));
+            }
 
             experimentManager = new ExperimentManager();
             experimentManager.AllModules = dataManager.GetAllModules();
-            if(experimentManager.AllModules == null)
+            if (experimentManager.AllModules == null)
             {
                 Debug.Log("Ошибка в начальной загрузке информации про все модули");
             }
             else
             {
                 Debug.Log("Информация про все модули успешно загружена");
-            }  
+            }
+        }
+
+        private AppSettings GetSettings(string setting_file_path)
+        {
+            StreamReader sr = File.OpenText(setting_file_path);
+            string settings_json = "";
+            string tmp = "";
+
+            while ((tmp = sr.ReadLine()) != null)
+            {
+                settings_json += tmp;
+            }
+            sr.Close();
+            Debug.Log(settings_json);
+            try
+            {
+                var jset = JObject.Parse(settings_json);
+                Debug.Log(jset.ToString());
+                AppSettings settings = jset.ToObject<AppSettings>();
+                return settings;
+            }
+            catch (JsonReaderException e)
+            {
+                Debug.Log("Exception while parsing experiment file " + setting_file_path);
+                Debug.Log(e.Message);
+                return null;
+            }
         }
 
         public void OnExperimentIdEnterStart()
@@ -82,7 +126,7 @@ namespace Assets.Scripts
                     {
                         string notification_str = "Успешно получена информация про эксперимент с id = " + experiment.ExperimentId +
                             ". Отсутствуют явлыки следующих исполняемых файлов: \n";
-                        foreach(string str in missingExecs)
+                        foreach (string str in missingExecs)
                         {
                             notification_str += str + "\n";
                         }
@@ -91,12 +135,12 @@ namespace Assets.Scripts
                     }
                     else
                     {
-                        applicationView.ShowNotificationMessage("Успешно получена информация про эксперимент с id = " + experiment.ExperimentId + 
+                        applicationView.ShowNotificationMessage("Успешно получена информация про эксперимент с id = " + experiment.ExperimentId +
                             ". Исполняемые файлы всех модулей присутствуют");
                         applicationView.OpenScreen(ScreenType.MainMenu);
                     }
 
-                    
+
                     break;
             }
 
@@ -126,7 +170,7 @@ namespace Assets.Scripts
 
         public void OnRegistrationSend()
         {
-            
+
             ParticipantRegistrationCanvasController registrationCanvasController = canvasManager.GetParticipantRegistrationCanvasController();
             ParticipantRegistrationRequest registrationInfo = registrationCanvasController.GetRegistrationInfo();
             Participant res = dataManager.Register(registrationInfo);
@@ -155,7 +199,7 @@ namespace Assets.Scripts
                     applicationView.OpenScreen(ScreenType.ParticipantInExperimentMenu);
                     break;
             }
-        
+
         }
 
         public void OnAuthorisationSend()
@@ -209,7 +253,7 @@ namespace Assets.Scripts
                     break;
             }
         }
-        
+
         public void OnParticipantInExperimentSend()
         {
             ParticipantInExperimentCanvasController participantInExperimentCanvasController = canvasManager.GetParticipantInExperimentCanvasController();
@@ -217,7 +261,7 @@ namespace Assets.Scripts
 
             experimentManager.SetParticipantInExperimentInfo(curr_identifying_participant, participantInExperiment);
 
-            if(curr_identifying_participant == 1)
+            if (curr_identifying_participant == 1)
             {
                 applicationView.ShowNotificationMessage("Первый участник успешно добавлен.");
             }
@@ -225,7 +269,7 @@ namespace Assets.Scripts
             {
                 applicationView.ShowNotificationMessage("Второй участник успешно добавлен.");
             }
-            
+
 
             applicationView.OpenScreen(ScreenType.MainMenu);
         }
@@ -306,5 +350,19 @@ namespace Assets.Scripts
         }
 
 
+        public class AppSettings
+        {
+            [JsonProperty("AlphaS_Web_Ip")]
+            public string AlphaS_Web_Ip { get; set; }
+
+            public AppSettings(string ip)
+            {
+                AlphaS_Web_Ip = ip;
+            }
+
+        }
+
     }
+
+    
 }

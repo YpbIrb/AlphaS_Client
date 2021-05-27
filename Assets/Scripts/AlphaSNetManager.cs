@@ -16,7 +16,7 @@ namespace Assets.Scripts
 {
     class AlphaSNetManager : Singleton<AlphaSNetManager>
     {
-        private const string base_url = "http://localhost:8000/api";
+        private string base_url = "http://localhost:8000/api";
         private const string participant_creation_url = "/Participants/Create";
         private const string participant_get_url = "/Participants/";
         private const string operator_login_url = "/Accounts/login/";
@@ -27,6 +27,10 @@ namespace Assets.Scripts
         private const string allModules_get_url = "/Modules";
         static HttpClient client;
 
+        public void SetAlphaSWebIp(string ip)
+        {
+            base_url = "http://" + ip + ":80/api";
+        }
 
         protected override void Awake()
         {

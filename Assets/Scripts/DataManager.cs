@@ -28,6 +28,11 @@ namespace Assets.Scripts
             netManager = AlphaSNetManager.GetInstance();
         }
 
+        public void SetAlphaSWebIp(string ip)
+        {
+            netManager.SetAlphaSWebIp(ip);
+        }
+
         /*
          * Возвращает партисипанта с id = 
          * -1 при проблемах с соединением с сервером, 
